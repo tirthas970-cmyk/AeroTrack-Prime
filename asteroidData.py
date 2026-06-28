@@ -3,11 +3,11 @@ import requests
 import pandas as pd
 
 class CollectAsteroidData:
-    def __init__(self, API_KEY, today, tomorrow):
+    def __init__(self, API_KEY, today, next_days):
         self.query_params = {
             "api_key": API_KEY,
             "start_date": today,
-            "end_date": tomorrow
+            "end_date": next_days
 
         }
 
@@ -35,7 +35,6 @@ class CollectAsteroidData:
 
                     #name is formatted like this: (name)
                     #remove the ()
-
                     clean_name = name.replace("(", "").replace(")", "")
                            
                     #size
@@ -50,14 +49,17 @@ class CollectAsteroidData:
                     velocity_mph = relative_velocity["miles_per_hour"]
 
                     is_hazardous = asteroid["is_potentially_hazardous_asteroid"]
-                
+                    
+                    if is_hazardous:
+                        status = "✔️"
+                    else:
+                        status = "❌"
+                    #is_hazardous_emoji = is_hazardous.replace("false", "❌").replace("true", "✔️")
+                    
                     name_list.append(clean_name)
                     size_list.append(meters_max)
                     speed_list.append(velocity_mph)
-                    is_hazardous_list.append(is_hazardous)
-
-                    print(f"Asteroid Name: {name} | Hazardous: {is_hazardous} | Size: {meters_max} | Speed: {velocity_mph}") #testing
-
+                    is_hazardous_list.append(status)
 
             asteroid_data = pd.DataFrame(
                 {
