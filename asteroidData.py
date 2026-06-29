@@ -79,7 +79,7 @@ class CollectAsteroidData:
                 "Name": self.name_list,
                 "Size (meters)": self.size_list,
                 "speed_list (mph)": self.speed_list,
-                "hazardous_status": self.is_hazardous_list
+                #"hazardous_status": self.is_hazardous_list
 
             }
         )
