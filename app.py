@@ -1,6 +1,6 @@
 import streamlit as st
 from datetime import timedelta, date
-from AsteroidData import CollectAsteroidData
+from asteroidData import CollectAsteroidData
 
 import streamlit as st
 
@@ -83,8 +83,11 @@ next_days = today + timedelta(days=3)
 
 collect_asteroid_data = CollectAsteroidData(API_KEY, today, next_days)
 
-asteroid_data = collect_asteroid_data.get_data()
+asteroid_data = collect_asteroid_data.get_table()
 
+asteroid_hazardous_status = collect_asteroid_data.get_critical_hazardous_status()
+
+print(asteroid_hazardous_status)
 
 if "go" not in st.session_state:
     st.session_state.go = False
@@ -101,15 +104,17 @@ if st.session_state.go == False:
 
             
             """)
+    
+    col1, col2, col3 = st.columns([10, 5, 10])
 
+    with col2:
+        if st.button("GO", use_container_width=True):
+            st.session_state.go = True
+            st.rerun()
 
-col1, col2, col3 = st.columns([10, 5, 10])
-
-with col2:
-    if st.button("GO", use_container_width=True):
-        st.session_state.go = True
-        st.rerun()
 
 if st.session_state.go:
     st.table(asteroid_data)
+
+
 
