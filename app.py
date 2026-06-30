@@ -72,30 +72,50 @@ h1 {
 [data-testid="stTable"] table td { 
     color: #ffffff !important; 
 } 
-/* 🌌 FIXED SCROLLING PANEL (REMOVED FIXED POSITIONING) 🌌 */ 
-[data-element-key="fixed_panel"], .st-key-fixed_panel, div[data-element-key="fixed_panel"] { 
-    position: relative !important; /* Flows normally inside its container track */ 
-    width: 100% !important; /* Adapts completely to the column width */ 
-    margin-top: 0px !important; 
+
+/* 🔴 THREAT DETECTED PANEL (RED) */ 
+[data-element-key="threat_panel"], .st-key-threat_panel, div[data-element-key="threat_panel"] { 
+    position: relative !important; 
+    width: 100% !important; 
     padding: 25px !important; 
     background: rgba(14, 18, 36, 0.95) !important; 
     border: 2px solid #ff4b4b !important; 
     border-radius: 16px !important; 
     box-shadow: 0px 0px 20px rgba(255, 75, 75, 0.5), inset 0px 0px 15px rgba(255, 75, 75, 0.2) !important; 
 } 
-/* Typography overrides for internal content blocks */ 
-[data-element-key="fixed_panel"] h2, .st-key-fixed_panel h2 { 
+[data-element-key="threat_panel"] h2, .st-key-threat_panel h2 { 
     color: #ff4b4b !important; 
     text-shadow: 0px 0px 10px rgba(255, 75, 75, 0.6); 
     margin-top: 0px !important; 
 } 
-[data-element-key="fixed_panel"] [data-testid="stWidgetLabel"] p, .st-key-fixed_panel [data-testid="stWidgetLabel"] p { 
+
+/* 🟢 DEEP SPACE CLEAR PANEL (GREEN) */ 
+[data-element-key="clear_panel"], .st-key-clear_panel, div[data-element-key="clear_panel"] { 
+    position: relative !important; 
+    width: 100% !important; 
+    padding: 25px !important; 
+    background: rgba(14, 18, 36, 0.95) !important; 
+    border: 2px solid #00ff66 !important; 
+    border-radius: 16px !important; 
+    box-shadow: 0px 0px 20px rgba(0, 255, 102, 0.5), inset 0px 0px 15px rgba(0, 255, 102, 0.2) !important; 
+} 
+[data-element-key="clear_panel"] h2, .st-key-clear_panel h2 { 
+    color: #00ff66 !important; 
+    text-shadow: 0px 0px 10px rgba(0, 255, 102, 0.6); 
+    margin-top: 0px !important; 
+} 
+
+/* Shared typography overrides for both panels */ 
+[data-element-key="threat_panel"] [data-testid="stWidgetLabel"] p, .st-key-threat_panel [data-testid="stWidgetLabel"] p, 
+[data-element-key="clear_panel"] [data-testid="stWidgetLabel"] p, .st-key-clear_panel [data-testid="stWidgetLabel"] p { 
     color: #FFBE46 !important; 
     font-weight: bold !important; 
 } 
-[data-element-key="fixed_panel"] p, .st-key-fixed_panel p { 
+[data-element-key="threat_panel"] p, .st-key-threat_panel p,
+[data-element-key="clear_panel"] p, .st-key-clear_panel p { 
     color: #ffffff !important; 
 } 
+
 .dashboard-main-content { 
     padding-right: 15px; 
 } 
@@ -108,7 +128,6 @@ div.element-container:has(button[key="back_btn"]),
     max-width: 100% !important;
 }
 </style> """, unsafe_allow_html=True)
-
 
 
 if 'go' not in st.session_state:
@@ -146,32 +165,76 @@ else:
     unsafe_allow_html=True
 )
     # Setup Data
-
+# Setup Data
     API_KEY = st.secrets["nasa_key"]
     today = date.today()
     next_days = today + timedelta(days=3)
+
     collect_asteroid_data = CollectAsteroidData(API_KEY, today, next_days)
     asteroid_data = collect_asteroid_data.get_table()
 
-    main, side = st.columns([5, 3])
-    
-    with main:
-        st.markdown('<div class="dashboard-main-content">', unsafe_allow_html=True)
-        st.table(asteroid_data)
-        st.markdown('</div>', unsafe_allow_html=True)
+    # 1. CLEAN SIDE-BY-SIDE COLUMN LAYOUT
+    # Generates two clean container pillars (60% table area, 40% threat display)
+    main_col, side_col = st.columns([3, 2])
 
-        if st.button("Back", key="back_btn"): 
-            st.session_state.go = False
-            st.rerun()
-        
-    with side:
+    # Left side content
+    with main_col:
+        # Use st.container to inject custom class styling safely without raw HTML layout leaks
+        with st.container():
+            st.table(asteroid_data)
 
+    # Right side content
+    with side_col:
         maximum_threat = collect_asteroid_data.maximun_potential_threat()
-        with st.container(key="fixed_panel"):
-            st.header("Maximum Potential Threat") 
-            st.write("This is the total potential kinetic energy of the asteroid")
+        
+        panel_key = "threat_panel" 
+        if maximum_threat:
+            panel_key = "threat_panel"
+        else:
+            panel_key = "clear_panel"
 
-            st.write(f"Name: {maximum_threat["Name"]}")
-            st.write(f"Energy: {maximum_threat["Energy"]} megatons")
-            st.write(f"Size: {maximum_threat["Size"]}")
-            st.write(f"Speed: {maximum_threat["Speed"]}")
+        with st.container(key=panel_key):
+            # High-impact Header with warning icon
+            
+            if maximum_threat:
+                st.markdown("### ⚠️ CRITICAL THREAT DETECTED")
+
+                st.caption("Maximum Potential Kinetic Energy Impact Analysis")
+                st.divider()
+                
+                st.markdown(f"## **{maximum_threat['Name'].upper()}**")
+                
+                # Dynamic Threat Level Badge based on Megatons
+                energy = maximum_threat['Energy']
+                if energy > 1000:
+                    st.error("🚨 THREAT LEVEL: PLANETARY DEVASTATION")
+                elif energy > 50:
+                    st.warning("🟠 THREAT LEVEL: REGIONAL EXTINCTION")
+                else:
+                    st.info("🟡 THREAT LEVEL: METROPOLITAN IMPACT")
+                    
+                st.write("") 
+                
+                # Sub-metrics nested neatly within the right column container
+                m_col1, m_col2 = st.columns(2)
+                with m_col1:
+                    st.metric(label="⚡ POTENTIAL ENERGY", value=f"{energy:,.2f} MT")
+                    st.metric(label="📏 DIAMETER", value=f"{round(maximum_threat['Size'], 3)} meters")
+                with m_col2:
+                    st.metric(label="🚀 VELOCITY", value=f"{round(maximum_threat['Speed'], 3)} mph")
+                    
+                st.divider()
+                if energy > 50:
+                    tsar_bomba_equiv = int(energy / 50) 
+                
+                else:
+                    tsar_bomba_equiv = 1
+                st.markdown(f"Estimated destructive yield is equivalent to detonating *{tsar_bomba_equiv:,} Tsar Bomba(s)*, the most powerful and destructive nuclear weapom ever,  simultaneously.")
+            else:
+                st.success("🌌 Deep space scans clear. No immediate threats detected.")
+
+
+    st.write("") 
+    if st.button("Back", key="back_btn"):
+        st.session_state.go = False
+        st.rerun()

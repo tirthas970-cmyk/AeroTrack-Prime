@@ -78,7 +78,7 @@ class CollectAsteroidData:
                 "Name": self.name_list,
                 "Size (meters)": self.size_list,
                 "Speed (mph)": self.speed_list,
-                "hazardous_status": self.is_hazardous_list
+                #"hazardous_status": self.is_hazardous_list
 
             }
         )
@@ -106,10 +106,9 @@ class CollectAsteroidData:
         highest_energy = max(kinetic_energy_list)
         highest_index = kinetic_energy_list.index(highest_energy)
 
-        #Equations 
+        #Equations:
 
         # Mass (m) = (4/3 * pi * (diameter(in meters)/2)^3) * 2000 kg/m^3
-
         # Energy in Megatons =  (.5 * m * v(m/s)^2)/(4.184 * 10^15)
 
         mass = ((4/3) * math.pi * (self.size_list[highest_index]/2)**3) * 2000
