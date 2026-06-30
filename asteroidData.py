@@ -1,8 +1,10 @@
 import requests
 import requests
 import pandas as pd
+import math
 
 ### TO DO: TRY- EXCEPT
+
 
 
 class CollectAsteroidData:
@@ -52,18 +54,15 @@ class CollectAsteroidData:
 
                     is_hazardous = asteroid["is_potentially_hazardous_asteroid"]
                     
-                   #if is_hazardous:
-                        #status = "✔️"
-                    #else:
-                       # status = "❌"
-                    #is_hazardous_emoji = is_hazardous.replace("false", "❌").replace("true", "✔️")
-                    
-
+                    if is_hazardous:
+                        status = "✔️"
+                    else:
+                       status = "❌"
                     
                     self.name_list.append(clean_name)
                     self.size_list.append(diameter)
                     self.speed_list.append(velocity)
-                    self.is_hazardous_list.append(is_hazardous)
+                    self.is_hazardous_list.append(status)
                     self.miss_distance.append(asteroid_miss_distance)
 
                     #return name_list, size_list, speed_list
@@ -79,40 +78,53 @@ class CollectAsteroidData:
                 "Name": self.name_list,
                 "Size (meters)": self.size_list,
                 "Speed (mph)": self.speed_list,
-                #"hazardous_status": self.is_hazardous_list
+                "hazardous_status": self.is_hazardous_list
 
             }
         )
 
         return asteroid_data
 
-    def get_critical_hazardous_status(self):
-        self.get_data
+    def maximun_potential_threat(self):
 
-        hazardous_indices = []
 
-        for i, hazardous_status in enumerate(self.is_hazardous_list):
-            if hazardous_status:
-                hazardous_indices.append(i)
+        #PIVOT: 
 
+         #d^3 * v^2
+         #(\(d^3 \times v^2\)).
+         #m/s = mph * .44704
+       
+
+        self.get_data()
+
+        kinetic_energy_list = []
+        for i in range(len(self.size_list)):
+            kinetic_energy = (self.size_list[i] ** 3) * (self.speed_list[i] ** 2)
+            kinetic_energy_list.append(kinetic_energy)
         
-        min_difference = float('inf')
-        min_index = None
-        for index in hazardous_indices:
-            try:
-                difference = self.miss_distance[index] - 6371
 
-                if difference < min_difference:
-                    min_difference = difference
-                    min_index = index
-            except IndexError:
-                continue 
+        highest_energy = max(kinetic_energy_list)
+        highest_index = kinetic_energy_list.index(highest_energy)
 
-        
-        if min_index is not None:
-            return f"The smallest difference is {min_difference},  at {min_index}"
-        else:
-            return "It is none"
+        #Equations 
 
+        # Mass (m) = (4/3 * pi * (diameter(in meters)/2)^3) * 2000 kg/m^3
 
-   
+        # Energy in Megatons =  (.5 * m * v(m/s)^2)/(4.184 * 10^15)
+
+        mass = ((4/3) * math.pi * (self.size_list[highest_index]/2)**3) * 2000
+
+        meters_per_sec = self.speed_list[highest_index] * .44704
+
+        energy_megatons = (.5 * mass * meters_per_sec**2)/(4.184 * 10**15)
+
+        highest_potential_energy = {
+            "Name": self.name_list[highest_index],
+            "Energy": round(energy_megatons, 2),
+            "Size": self.size_list[highest_index],
+            "Speed": self.speed_list[highest_index]
+        }
+
+        return highest_potential_energy
+
+       
