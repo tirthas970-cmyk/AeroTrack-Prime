@@ -81,19 +81,16 @@ class MockAsteroidEngine:
             moving_away = (asteroid_x * vx + asteroid_y * vy) > 0
 
             if r <= self.EARTH_RADIUS:
-                print(f"ASTEROID HIT EARTH. Closest approach distance: {min_approach_dist} m")
-                running = False
+                return f"ASTEROID HIT EARTH. Closest approach distance: {min_approach_dist}"
             elif moving_away and r > self.EARTH_RADIUS * 3:
                 if min_approach_dist < initial_distance:
-                    print(f"MISS! Asteroid flew past Earth. Closest approach: {min_approach_dist} m")
+                    return f"MISS! Asteroid flew past Earth. Closest approach: {min_approach_dist} m"
                 else:
-                    print("Lost in space! Flew directly away")
-                running = False
+                    return "Lost in space! Flew directly away"
             
             if steps >= max_steps:
-                print("Simulation Timeout: Asteroid entered a stable orbit or calculations timed out")
-                running = False
-                break
+                return "Simulation Timeout: Asteroid entered a stable orbit or calculations timed out"
+               
 
                     
        

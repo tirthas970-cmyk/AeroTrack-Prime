@@ -1,8 +1,17 @@
 import streamlit as st
 from datetime import timedelta, date
 from asteroidData import CollectAsteroidData 
+from TrajectoryEngine import MockAsteroidEngine
 
 st.set_page_config(layout="wide")
+
+
+# Setup Data
+API_KEY = st.secrets["nasa_key"]
+today = date.today()
+next_days = today + timedelta(days=3)
+
+collect_asteroid_data = CollectAsteroidData(API_KEY, today, next_days)
 
 # The aesthetic of the dashboard
 st.markdown(""" 
@@ -162,6 +171,10 @@ div.element-container:has(button[key="next_btn"]), .st-key-next_btn, .st-key-nex
 if 'go' not in st.session_state:
     st.session_state.go = False
 
+if 'next' not in st.session_state:
+    st.session_state.next = False
+
+#welcome screen 
 if not st.session_state.go:
     st.title("AeroTrack Prime ☄️")
     st.markdown("### Welcome aboard!")
@@ -181,6 +194,37 @@ if not st.session_state.go:
         if st.button("GO", use_container_width=True):
             st.session_state.go = True
             st.rerun()
+elif st.session_state.next:
+
+    st.markdown(
+    """
+    <div style="position: absolute; top: -60px; left: 0px; color: #F8FAFC; font-family: Helvetica; font-size: 24px; font-weight: bold; letter-spacing: 1px; white-space: nowrap; z-index: 999999;
+        text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);">
+        🚀 AeroTrack-Prime
+    </div>
+    """, 
+    unsafe_allow_html=True
+)
+    
+    slide_panel, other_panel = st.columns([3, 2])
+    
+    with slide_panel:
+        Asteroid_Angle = st.slider("Asteroid Angle (°)", min_value=-20, max_value=20, value=0, help="Degrees relative to Earth. 0° is a direct head-on shot.")
+        Velocity = st.slider("Velocity (m/s)",  min_value=15000, max_value=30000, value=22000,    help="Speed in meters per second (m/s). 22,000 m/s is roughly 49,000 mph.")
+        Radius = st.slider("Radius (meters)",  min_value=15, max_value=1000, value=200, help="Asteroid radius in meters. A 1,000m radius is a 2-kilometer wide asteroid.")
+
+        asteroid_simulation = MockAsteroidEngine(angle=Asteroid_Angle, speed=Velocity, radius=Radius)
+
+        asteroid_simulation.calculate_path()
+
+        st.write(asteroid_simulation.calculate_path())
+
+
+    if st.button("Back to terminal"):
+        st.session_state.next = False
+        st.rerun()
+
+#table + panel
 else:
     
     st.markdown(
@@ -192,13 +236,7 @@ else:
     """, 
     unsafe_allow_html=True
 )
-    # Setup Data
-# Setup Data
-    API_KEY = st.secrets["nasa_key"]
-    today = date.today()
-    next_days = today + timedelta(days=3)
 
-    collect_asteroid_data = CollectAsteroidData(API_KEY, today, next_days)
     asteroid_data = collect_asteroid_data.get_table()
 
     # 1. CLEAN SIDE-BY-SIDE COLUMN LAYOUT
@@ -260,10 +298,6 @@ else:
                 st.success("🌌 Deep space scans clear. No immediate threats detected.")
             
             
-
-if 'next' not in st.session_state:
-    st.session_state.next = False
-
     st.write("") 
     back_btn, next_btn = st.columns([2.5, .75])
     with back_btn:
