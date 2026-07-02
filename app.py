@@ -144,7 +144,6 @@ if not st.session_state.go:
 - **Impact Zone Assessment**: Predicts landing and damage of the asteroid using Machine Leaning
 - **Automated Report Generator**: A text ffile that details all information of an asteroid
 """
-
     )
     
     # Centered GO Button

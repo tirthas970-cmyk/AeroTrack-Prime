@@ -40,10 +40,9 @@ class MockAsteroidEngine:
         """
 
         volume = (4/3) * (math.pi) * self.radius**3
-        mass = volume * self.AVERAGE_DENSITY
+        mass = volume * self.AVERAGE_DENSITY #maybe need later
 
-        #trig
-        
+        #trig        
         vx = self.speed * math.cos(math.radians(self.angle))
         vy = self.speed * math.sin(math.radians(self.angle))
 
@@ -53,11 +52,18 @@ class MockAsteroidEngine:
         
         dt = 10 #updates every 10 second
 
-        inital_distance = math.sqrt(asteroid_x**2 + asteroid_y**2)
+        min_approach_dist = float("inf")
+        initial_distance = math.sqrt(asteroid_x**2 + asteroid_y**2)
 
         running = True
+        steps = 0
+        max_steps = 5000
         while running:
+            steps += 1
             r = math.sqrt(asteroid_x**2 + asteroid_y**2)
+
+            if r < min_approach_dist:
+                min_approach_dist = r
 
             accerlation = (self.GRAVITY * self.EARTH_MASS) / (r**2)
             accerlation_x = -accerlation * (asteroid_x/r)
@@ -68,29 +74,41 @@ class MockAsteroidEngine:
             asteroid_x += vx * dt
             asteroid_y += vy * dt
 
+            #vector dot product 
+            # < 0 -> asteroid moves towards Earth
+            # =0: Perpendicular to Earth
+            # > 0 --> moving away from Earth
+            moving_away = (asteroid_x * vx + asteroid_y * vy) > 0
+
             if r <= self.EARTH_RADIUS:
-                print("ASTEROID HAS BEEN HIT")
+                print(f"ASTEROID HIT EARTH. Closest approach distance: {min_approach_dist} m")
                 running = False
-            elif asteroid_x > self.EARTH_x and vx > 0: #vx > 0 means it mvoes to the right
-                print("IT WILL MISS")
+            elif moving_away and r > self.EARTH_RADIUS * 3:
+                if min_approach_dist < initial_distance:
+                    print(f"MISS! Asteroid flew past Earth. Closest approach: {min_approach_dist} m")
+                else:
+                    print("Lost in space! Flew directly away")
                 running = False
-            elif r > inital_distance:
-                print("Lost in Space")
+            
+            if steps >= max_steps:
+                print("Simulation Timeout: Asteroid entered a stable orbit or calculations timed out")
                 running = False
+                break
 
+                    
+       
 
-
+#Test
+print("--- Asteroid 1 (Straight Line Shot) ---")
 asteroid1 = MockAsteroidEngine(radius=1000, angle=0, speed=25000)
 asteroid1.calculate_path()
 
-
+print("\n--- Asteroid 2 (Deflected Angle Miss) ---")
 asteroid2 = MockAsteroidEngine(radius=500, angle=15, speed=22000)
 asteroid2.calculate_path()
 
+print("\n--- Asteroid 3 (Fleeing Trajectory) ---")
 asteroid3 = MockAsteroidEngine(radius=800, angle=180, speed=15000)
 asteroid3.calculate_path()
-
-
-
 
 
