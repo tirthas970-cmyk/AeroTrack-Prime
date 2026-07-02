@@ -11,7 +11,7 @@ st.markdown("""
     background: radial-gradient(ellipse at center, #1b2735 0%, #090a0f 100%); 
     background-blend-mode: multiply; 
     min-height: 100vh; 
-    overflow-y: auto; /* Changed from hidden to allow main page scrolling */ 
+    overflow-y: auto; 
 } 
 .stApp::before { 
     content: ""; 
@@ -35,15 +35,15 @@ h1 {
     color: #FFBE46; 
     text-align: center; 
     font-family: Helvetica; 
-    margin-bottom: 2rem !important; 
+    margin-bottom: 1.5rem !important; 
 } 
-/* SCI-FI SPACE THEION BUTTON */ 
+/* SCI-FI SPACE THEME BUTTONS */ 
 .stButton>button { 
     background: linear-gradient(135deg, #111936 0%, #060b19 100%) !important; 
     color: #FFBE46 !important; 
     font-weight: bold !important; 
-    font-size: 24px !important; 
-    padding: 12px 0px !important; 
+    font-size: 18px !important; 
+    padding: 6px 0px !important; 
     border-radius: 8px !important; 
     border: 2px solid #FFBE46 !important; 
     letter-spacing: 2px !important; 
@@ -57,78 +57,107 @@ h1 {
     box-shadow: 0px 0px 25px rgba(255, 190, 70, 0.8), 0px 0px 10px rgba(255, 255, 255, 0.5) !important; 
     transform: translateY(-2px) scale(1.02); 
 } 
-/* COSMIC STREAMLIT TABLE HOOK */ 
+/* 🌌 COSMIC STREAMLIT TABLE HOOK */ 
 [data-testid="stTable"] { 
     background: rgba(17, 25, 54, 0.5) !important; 
     border: 2px solid #00d2ff !important; 
     border-radius: 12px !important; 
-    padding: 15px !important; 
+    padding: 12px !important; 
     box-shadow: 0px 0px 15px rgba(0, 210, 255, 0.4) !important; 
 } 
 [data-testid="stTable"] table th { 
     color: #FFBE46 !important; 
     background-color: rgba(6, 11, 25, 0.8) !important; 
+    padding: 6px 10px !important; 
 } 
 [data-testid="stTable"] table td { 
     color: #ffffff !important; 
+    padding: 6px 10px !important; 
+    font-size: 14px !important; 
 } 
-
-/* 🔴 THREAT DETECTED PANEL (RED) */ 
+/* 🔴 THREAT DETECTED PANEL (STRETCHED TO MATCH TABLE) */ 
 [data-element-key="threat_panel"], .st-key-threat_panel, div[data-element-key="threat_panel"] { 
-    position: relative !important; 
-    width: 100% !important; 
-    padding: 25px !important; 
+    display: flex !important; 
+    flex-direction: column !important; 
+    height: 100% !important; 
+    min-height: 100% !important; 
+    padding: 22px !important; 
     background: rgba(14, 18, 36, 0.95) !important; 
     border: 2px solid #ff4b4b !important; 
     border-radius: 16px !important; 
     box-shadow: 0px 0px 20px rgba(255, 75, 75, 0.5), inset 0px 0px 15px rgba(255, 75, 75, 0.2) !important; 
 } 
 [data-element-key="threat_panel"] h2, .st-key-threat_panel h2 { 
+    font-size: 1.95rem !important; 
     color: #ff4b4b !important; 
     text-shadow: 0px 0px 10px rgba(255, 75, 75, 0.6); 
     margin-top: 0px !important; 
+    margin-bottom: 4px !important; 
 } 
-
-/* 🟢 DEEP SPACE CLEAR PANEL (GREEN) */ 
+/* 🟢 DEEP SPACE CLEAR PANEL (STRETCHED TO MATCH TABLE) */ 
 [data-element-key="clear_panel"], .st-key-clear_panel, div[data-element-key="clear_panel"] { 
-    position: relative !important; 
-    width: 100% !important; 
-    padding: 25px !important; 
+    display: flex !important; 
+    flex-direction: column !important; 
+    height: 100% !important; 
+    min-height: 100% !important; 
+    padding: 22px !important; 
     background: rgba(14, 18, 36, 0.95) !important; 
     border: 2px solid #00ff66 !important; 
     border-radius: 16px !important; 
     box-shadow: 0px 0px 20px rgba(0, 255, 102, 0.5), inset 0px 0px 15px rgba(0, 255, 102, 0.2) !important; 
 } 
 [data-element-key="clear_panel"] h2, .st-key-clear_panel h2 { 
+    font-size: 1.95rem !important; 
     color: #00ff66 !important; 
     text-shadow: 0px 0px 10px rgba(0, 255, 102, 0.6); 
     margin-top: 0px !important; 
+    margin-bottom: 4px !important; 
 } 
-
-/* Shared typography overrides for both panels */ 
+/* Formats parent inner vertical space block */ 
+[data-element-key="threat_panel"] > div, [data-element-key="clear_panel"] > div { 
+    display: flex !important; 
+    flex-direction: column !important; 
+    height: 100% !important; 
+    justify-content: space-between !important; 
+} 
+/* Fix spacing gaps for layout lines */ 
+[data-element-key="threat_panel"] hr, [data-element-key="clear_panel"] hr { 
+    margin: 12px 0 !important; 
+} 
+/* ⚡ METRICS FORMATTING */ 
+[data-testid="stMetric"] { 
+    padding: 0px !important; 
+} 
+[data-testid="stMetricLabel"] p { 
+    font-size: 0.9rem !important; 
+} 
+[data-testid="stMetricValue"] div { 
+    font-size: 2.1rem !important; 
+    font-weight: bold !important; 
+} 
+/* Summary text description sizes */ 
+[data-element-key="threat_panel"] p, .st-key-threat_panel p, [data-element-key="clear_panel"] p, .st-key-clear_panel p { 
+    font-size: 18.5px !important; 
+    line-height: 2.0 !important; 
+    margin-bottom: 15px !important; 
+} 
+/* Shared typography overrides */ 
 [data-element-key="threat_panel"] [data-testid="stWidgetLabel"] p, .st-key-threat_panel [data-testid="stWidgetLabel"] p, 
 [data-element-key="clear_panel"] [data-testid="stWidgetLabel"] p, .st-key-clear_panel [data-testid="stWidgetLabel"] p { 
     color: #FFBE46 !important; 
     font-weight: bold !important; 
 } 
-[data-element-key="threat_panel"] p, .st-key-threat_panel p,
-[data-element-key="clear_panel"] p, .st-key-clear_panel p { 
-    color: #ffffff !important; 
-} 
-
 .dashboard-main-content { 
     padding-right: 15px; 
 } 
-
-/* 🔙 TARGETED BACK BUTTON LENGTH OVERRIDE */ 
-div.element-container:has(button[key="back_btn"]), 
-.st-key-back_btn, 
-.st-key-back_btn > button {
-    width: 200px !important;  /* Change 350px to whatever width you want */
-    max-width: 100% !important;
-}
-</style> """, unsafe_allow_html=True)
-
+/* 🔙 TARGETED NAVIGATION BUTTON WIDTH OVERRIDES */ 
+div.element-container:has(button[key="back_btn"]), .st-key-back_btn, .st-key-back_btn > button,
+div.element-container:has(button[key="next_btn"]), .st-key-next_btn, .st-key-next_btn > button { 
+    width: 200px !important; 
+    max-width: 90% !important; 
+    margin-top: 10px !important; 
+} 
+</style> """, unsafe_allow_html=True) 
 
 if 'go' not in st.session_state:
     st.session_state.go = False
@@ -174,9 +203,7 @@ else:
 
     # 1. CLEAN SIDE-BY-SIDE COLUMN LAYOUT
     # Generates two clean container pillars (60% table area, 40% threat display)
-    main_col, side_col = st.columns([3, 2])
-
-    # Left side content
+    main_col, side_col = st.columns([3, 2])    
     with main_col:
         # Use st.container to inject custom class styling safely without raw HTML layout leaks
         with st.container():
@@ -231,9 +258,21 @@ else:
                 st.markdown(f"Estimated destructive yield is equivalent to detonating *{tsar_bomba_equiv:,} Tsar Bomba(s)*, the most powerful and destructive nuclear weapom ever,  simultaneously.")
             else:
                 st.success("🌌 Deep space scans clear. No immediate threats detected.")
+            
+            
 
+if 'next' not in st.session_state:
+    st.session_state.next = False
 
     st.write("") 
-    if st.button("Back", key="back_btn"):
-        st.session_state.go = False
-        st.rerun()
+    back_btn, next_btn = st.columns([2.5, .75])
+    with back_btn:
+        if st.button("Back", key="back_btn"):
+            st.session_state.go = False
+            st.rerun()
+    with next_btn:
+        if st.button("Next", key="next_btn"):
+            st.session_state.next = True
+            st.rerun()
+            
+            

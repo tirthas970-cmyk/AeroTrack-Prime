@@ -89,12 +89,10 @@ class CollectAsteroidData:
 
 
         #PIVOT: 
-
          #d^3 * v^2
          #(\(d^3 \times v^2\)).
          #m/s = mph * .44704
        
-
         self.get_data()
 
         kinetic_energy_list = []
