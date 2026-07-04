@@ -6,6 +6,8 @@ class MockAsteroidEngine:
         self.angle = angle
         self.speed = speed
 
+        self.closest_aproach_dist = None
+
         #constants
         self.GRAVITY = 6.674e-11
         self.EARTH_MASS = 5.972e24
@@ -14,6 +16,7 @@ class MockAsteroidEngine:
         self.EARTH_y = 0
         self.AVERAGE_DENSITY = 3000  #3,000 kg/m^3
     
+
     def calculate_path(self):
         #math for trajectory
         """
@@ -58,6 +61,7 @@ class MockAsteroidEngine:
         running = True
         steps = 0
         max_steps = 5000
+       
         while running:
             steps += 1
             r = math.sqrt(asteroid_x**2 + asteroid_y**2)
@@ -81,20 +85,18 @@ class MockAsteroidEngine:
             moving_away = (asteroid_x * vx + asteroid_y * vy) > 0
 
             if r <= self.EARTH_RADIUS:
-                return f"ASTEROID HIT EARTH. Closest approach distance: {min_approach_dist}"
+                self.closest_aproach_dist = round(min_approach_dist, 2)
+                return "hit"
             elif moving_away and r > self.EARTH_RADIUS * 3:
                 if min_approach_dist < initial_distance:
-                    return f"MISS! Asteroid flew past Earth. Closest approach: {min_approach_dist} m"
+                    self.closest_aproach_dist = round(min_approach_dist, 2)
+                    return "miss"
                 else:
-                    return "Lost in space! Flew directly away"
-            
+                    return "Lost"
+                            
             if steps >= max_steps:
-                return "Simulation Timeout: Asteroid entered a stable orbit or calculations timed out"
-               
-
+                return "stable"               
                     
-       
-
 #Test
 print("--- Asteroid 1 (Straight Line Shot) ---")
 asteroid1 = MockAsteroidEngine(radius=1000, angle=0, speed=25000)

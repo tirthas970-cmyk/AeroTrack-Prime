@@ -206,19 +206,28 @@ elif st.session_state.next:
     unsafe_allow_html=True
 )
     
-    slide_panel, other_panel = st.columns([3, 2])
+    slide_panel, sim_path, other_panel = st.columns([1, .7, 2])
     
     with slide_panel:
-        Asteroid_Angle = st.slider("Asteroid Angle (°)", min_value=-20, max_value=20, value=0, help="Degrees relative to Earth. 0° is a direct head-on shot.")
+        Asteroid_Angle = st.slider("Asteroid Angle (°)", min_value=-90, max_value=90, value=0, help="Degrees relative to Earth. 0° is a direct head-on shot.")
         Velocity = st.slider("Velocity (m/s)",  min_value=15000, max_value=30000, value=22000,    help="Speed in meters per second (m/s). 22,000 m/s is roughly 49,000 mph.")
         Radius = st.slider("Radius (meters)",  min_value=15, max_value=1000, value=200, help="Asteroid radius in meters. A 1,000m radius is a 2-kilometer wide asteroid.")
 
         asteroid_simulation = MockAsteroidEngine(angle=Asteroid_Angle, speed=Velocity, radius=Radius)
 
-        asteroid_simulation.calculate_path()
-
-        st.write(asteroid_simulation.calculate_path())
-
+        with sim_path:
+            if st.button("Simulate Path"):
+                asteroid_path = asteroid_simulation.calculate_path()
+                if asteroid_path == "hit":
+                    st.error("ASTEROID HITS EARTH!")
+                    st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")  
+                elif asteroid_path == "miss":
+                    st.warning("MISS! Asteroid flew past Earth!")
+                    st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")  
+                elif asteroid_path == "Lost":
+                    st.success("Lost in space! Flew directly away")
+                else:
+                    st.info("Simulation Timeout: Asteroid entered a stable orbit or calculations timed out")
 
     if st.button("Back to terminal"):
         st.session_state.next = False
