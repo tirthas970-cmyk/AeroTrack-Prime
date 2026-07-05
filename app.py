@@ -227,6 +227,27 @@ div.element-container:has(button[key="next_btn"]), .st-key-next_btn, .st-key-nex
     max-width: 90% !important;
     margin-top: 10px !important;
 }
+            
+/* 🔷 NEON BLUE GLOWING SIMULATION PATH PANEL */
+[data-element-key="sim_path_panel"], .st-key-sim_path_panel, div[data-element-key="sim_path_panel"] {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    padding: 22px !important;
+    background: rgba(14, 18, 36, 0.95) !important;
+    border: 2px solid #00d2ff !important; /* Cyber neon blue */
+    border-radius: 16px !important;
+    box-shadow: 0px 0px 20px rgba(0, 210, 255, 0.6), inset 0px 0px 15px rgba(0, 210, 255, 0.2) !important;
+}
+
+/* Match inner spacing behavior with your other panels */
+[data-element-key="sim_path_panel"] > div {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    justify-content: space-between !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -281,19 +302,22 @@ elif st.session_state.next:
             asteroid_simulation = MockAsteroidEngine(angle=Asteroid_Angle, speed=Velocity, radius=Radius)
 
             with sim_path:
-                if st.button("Simulate Path"):
-                    asteroid_path = asteroid_simulation.calculate_path()
-                    if asteroid_path == "hit":
-                        st.error("ASTEROID HITS EARTH!")
-                        st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")  
-                    elif asteroid_path == "miss":
-                        st.warning("MISS! Asteroid flew past Earth!")
-                        st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")  
-                    elif asteroid_path == "Lost":
-                        st.success("Lost in space! Flew directly away")
-                    else:
-                        st.info("Simulation Timeout: Asteroid entered a stable orbit or calculations timed out")
-
+                # Wrap everything inside this column in the new neon blue panel
+                with st.container(key="sim_path_panel"):
+                    if st.button("Simulate Path"):
+                        asteroid_path = asteroid_simulation.calculate_path()
+                        if asteroid_path == "hit":
+                            st.error("ASTEROID HITS EARTH!")
+                            st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")
+                        elif asteroid_path == "miss":
+                            st.warning("MISS! Asteroid flew past Earth!")
+                            st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")
+                        elif asteroid_path == "Lost":
+                            st.success("Lost in space! Flew directly away")
+                        else:
+                            st.info("Simulation Timeout: Asteroid entered a stable orbit or calculations timed out")
+                            
+   
     if st.button("Back to terminal"):
         st.session_state.next = False
         st.rerun()
