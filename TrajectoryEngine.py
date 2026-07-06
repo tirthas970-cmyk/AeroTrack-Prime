@@ -1,7 +1,7 @@
 import math
 
 class MockAsteroidEngine:
-    def __init__(self, radius, angle, speed):
+    def __init__(self, radius,speed, angle=0):
         self.radius = radius
         self.angle = angle
         self.speed = speed
@@ -95,7 +95,21 @@ class MockAsteroidEngine:
                     return "Lost"
                             
             if steps >= max_steps:
-                return "stable"               
+                return "stable"
+
+    def calculate_potential_energy(self):
+
+        #Equations:
+        # Mass (m) = (4/3 * pi * (diameter(in meters)/2)^3) * 2000 kg/m^3
+        # Energy in Megatons =  (.5 * m * v(m/s)^2)/(4.184 * 10^15)
+
+        mass = ((4/3) * math.pi * (self.radius)**3) * 2000
+
+        #meters_per_sec = self.speed_list[highest_index] * .44704
+
+        energy_megatons = (.5 * mass * self.speed**2)/(4.184 * 10**15)
+
+        return round(energy_megatons, 2)
                     
 #Test
 print("--- Asteroid 1 (Straight Line Shot) ---")
