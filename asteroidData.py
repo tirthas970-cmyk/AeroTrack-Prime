@@ -88,7 +88,7 @@ class CollectAsteroidData:
 
     def maximun_potential_threat(self):
 
-        #PIVOT: 
+        #Find the max kinetic energy (not in mt)
          #d^3 * v^2
          #(\(d^3 \times v^2\)).
          #m/s = mph * .44704
@@ -100,27 +100,14 @@ class CollectAsteroidData:
             kinetic_energy = (self.size_list[i] ** 3) * (self.speed_list[i] ** 2)
             kinetic_energy_list.append(kinetic_energy)
                 
-
         highest_energy = max(kinetic_energy_list)
         highest_index = kinetic_energy_list.index(highest_energy)
 
-        potetnial_energy = MockAsteroidEngine(radius=self.size_list[i]/2, speed=self.speed_list[i])
+        meters_per_sec = self.speed_list[highest_index] * .44704
+
+        potetnial_energy = MockAsteroidEngine(radius=self.size_list[highest_index]/2, speed=meters_per_sec)
 
         energy_megatons = potetnial_energy.calculate_potential_energy()
-
-
-
-
-        #Equations:
-
-        # Mass (m) = (4/3 * pi * (diameter(in meters)/2)^3) * 2000 kg/m^3
-        # Energy in Megatons =  (.5 * m * v(m/s)^2)/(4.184 * 10^15)
-
-        #mass = ((4/3) * math.pi * (self.size_list[highest_index]/2)**3) * 2000
-
-        #meters_per_sec = self.speed_list[highest_index] * .44704
-
-        #energy_megatons = (.5 * mass * meters_per_sec**2)/(4.184 * 10**15)
 
         highest_potential_energy = {
             "Name": self.name_list[highest_index],

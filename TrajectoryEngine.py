@@ -105,12 +105,11 @@ class MockAsteroidEngine:
 
         mass = ((4/3) * math.pi * (self.radius)**3) * 2000
 
-        #meters_per_sec = self.speed_list[highest_index] * .44704
 
         energy_megatons = (.5 * mass * self.speed**2)/(4.184 * 10**15)
 
         return round(energy_megatons, 2)
-                    
+           
 #Test
 print("--- Asteroid 1 (Straight Line Shot) ---")
 asteroid1 = MockAsteroidEngine(radius=1000, angle=0, speed=25000)
