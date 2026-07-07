@@ -14,6 +14,7 @@ next_days = today + timedelta(days=3)
 collect_asteroid_data = CollectAsteroidData(API_KEY, today, next_days)
 
 # The aesthetic of the dashboard
+# The aesthetic of the dashboard
 st.markdown("""
 <style>
 .stApp {
@@ -56,7 +57,7 @@ h1 {
     color: #FFBE46 !important;
     font-weight: bold !important;
     font-size: 18px !important;
-    padding: 6px 0px !important;
+    padding: 6px 20px !important; /* 👈 Changed from 0px to 20px to widen the border */
     border-radius: 8px !important;
     border: 2px solid #FFBE46 !important;
     letter-spacing: 2px !important;
@@ -248,6 +249,23 @@ div.element-container:has(button[key="next_btn"]), .st-key-next_btn, .st-key-nex
     height: 100% !important;
     justify-content: space-between !important;
 }
+            
+/* 🔷 FORCE CENTER THE SIMULATE PATH BUTTON AND CONTENT IN THE CYAN PANEL */
+[data-element-key="sim_path_panel"] div[data-testid="stVerticalBlockBorderWrapper"] > div > div > div[data-testid="stVerticalBlock"] {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;   /* Centers contents vertically */
+    align-items: center !important;       /* Centers contents horizontally */
+    height: 100% !important;
+    min-height: 100% !important;
+    text-align: center !important;        /* Falls back to text alignment centering */
+}
+
+[data-element-key="sim_path_panel"] div.stButton {
+    display: flex !important;
+    justify-content: center !important;   /* Extra insurance to explicitly center the button asset */
+    width: 100% !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -308,12 +326,15 @@ elif st.session_state.next:
                         asteroid_path = asteroid_simulation.calculate_path()
                         if asteroid_path == "hit":
                             st.error("ASTEROID HITS EARTH!")
+                            st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
                             st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")
                         elif asteroid_path == "miss":
                             st.warning("MISS! Asteroid flew past Earth!")
                             st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")
+                            st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
                         elif asteroid_path == "Lost":
                             st.success("Lost in space! Flew directly away")
+                            st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
                         else:
                             st.info("Simulation Timeout: Asteroid entered a stable orbit or calculations timed out")
                             

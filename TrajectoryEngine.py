@@ -41,10 +41,6 @@ class MockAsteroidEngine:
             * Miss: If x passes Earth and vx > 0 (moving away) OR r begins growing drastically larger than starting distance
             
         """
-
-        volume = (4/3) * (math.pi) * self.radius**3
-        mass = volume * self.AVERAGE_DENSITY #maybe need later
-
         #trig        
         vx = self.speed * math.cos(math.radians(self.angle))
         vy = self.speed * math.sin(math.radians(self.angle))
@@ -100,10 +96,10 @@ class MockAsteroidEngine:
     def calculate_potential_energy(self):
 
         #Equations:
-        # Mass (m) = (4/3 * pi * (diameter(in meters)/2)^3) * 2000 kg/m^3
+        # Mass (m) = (4/3 * pi * (diameter(in meters)/2)^3)
         # Energy in Megatons =  (.5 * m * v(m/s)^2)/(4.184 * 10^15)
 
-        mass = ((4/3) * math.pi * (self.radius)**3) * 2000
+        mass = ((4/3) * math.pi * (self.radius)**3) * self.AVERAGE_DENSITY
 
 
         energy_megatons = (.5 * mass * self.speed**2)/(4.184 * 10**15)
