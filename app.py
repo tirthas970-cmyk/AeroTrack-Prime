@@ -12,6 +12,7 @@ today = date.today()
 next_days = today + timedelta(days=3)
 
 collect_asteroid_data = CollectAsteroidData(API_KEY, today, next_days)
+collect_asteroid_data.text_file("gggg")
 
 # The aesthetic of the dashboard
 # The aesthetic of the dashboard

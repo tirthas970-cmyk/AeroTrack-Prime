@@ -1,0 +1,37 @@
+===============================================================                   
+ASTEROID REPORT:
+Generated: July, 10, 17:23
+================================================================    
+
+ObJECT INFORMATION
+--------------------
+Asteroid ID:
+Designation:
+Discovered:
+Size:
+Velocity:
+Closest Approach:
+Approach (smth):
+
+TRAJECTORY ANALYSIS
+-----------------------
+Impact Probability:
+Path Intersects Earth:
+Time of Closest Approach:
+Impact Time:
+
+HISTORICAL DATA:
+--------------------
+Previous Observations: 
+First Observed:
+Known Passages:
+Orbit TYpe:
+
+
+RECOMMENDATION:
+---------------
+
+
+
+====================================================================
+            END OF REPORT

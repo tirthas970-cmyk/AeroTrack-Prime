@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 import math
 from TrajectoryEngine import MockAsteroidEngine
-
+import datetime
 ### TO DO: TRY- EXCEPT
 
 
@@ -117,5 +117,54 @@ class CollectAsteroidData:
         }
 
         return highest_potential_energy
+    
 
+    def text_file(self, asteroid_name):
+        date = datetime.datetime.now()
+
+        month = date.strftime("%B")
+        day = date.day
+        time = date.strftime("%H:%M")
+        with open("report.txt", "w", encoding="utf-8") as file:
+    
+            file.write(f"""===============================================================                   
+ASTEROID REPORT:
+Generated: {month}, {day}, {time}
+================================================================    
+
+OBJECT INFORMATION
+--------------------
+Asteroid ID:
+Designation:
+Discovered:
+Size:
+Velocity:
+Closest Approach:
+Approach (smth):
+
+TRAJECTORY ANALYSIS
+-----------------------
+Impact Probability:
+Path Intersects Earth:
+Time of Closest Approach:
+Impact Time:
+
+HISTORICAL DATA:
+--------------------
+Previous Observations: 
+First Observed:
+Known Passages:
+Orbit Type:
+
+
+RECOMMENDATION:
+---------------
+
+
+
+====================================================================
+            END OF REPORT""")
+
+ 
+        
        
