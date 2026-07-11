@@ -118,62 +118,65 @@ else:
 
     # 1. CLEAN SIDE-BY-SIDE COLUMN LAYOUT
     # Generates two clean container pillars (60% table area, 40% threat display)
-    main_col, side_col = st.columns([3, 2])    
-    with main_col:
-        # Use st.container to inject custom class styling safely without raw HTML layout leaks
-        with st.container():
-            st.markdown("""
-        <style>
-        /* Target the table component cells to make them look clickable */
-        .stTable tbody tr {
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-        /* Add a sleek hover background change */
-        .stTable tbody tr:hover {
-            background-color: rgba(0, 210, 255, 0.15) !important;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-           
-            st.table(asteroid_data)
+    main_col, side_col = st.columns([3, 2]) 
 
-               # 4. Inject JavaScript to listen for clicks on your st.table rows
-    # It communicates the clicked index back to Streamlit natively via query parameters
-            st.components.v1.html("""
-        <script>
-        // Wait briefly for Streamlit to render the table elements
-        setTimeout(() => {
-            const tableRows = window.parent.document.querySelectorAll('.stTable tbody tr');
-            
-            tableRows.forEach((row, index) => {
-                row.addEventListener('click', () => {
-                    // Send the clicked index back to Python via URL parameter safely
-                    const url = new URL(window.parent.location.href);
-                    url.searchParams.set('selected_row', index);
-                    window.parent.location.href = url.href;
-                });
-            });
-        }, 300);
-        </script>
-    """, height=0) # Hidden height=0 component just to execute the JavaScri
+    st.markdown(""" 
+    <style> 
+    .stTable tbody tr { cursor: pointer; transition: background-color 0.2s ease; } 
+    .stTable tbody tr:hover { background-color: rgba(0, 210, 255, 0.15) !important; } 
+    </style> 
+    """, unsafe_allow_html=True) 
 
-        query_params = st.query_params
-        if "selected_row" in query_params:
-            clicked_index = int(query_params["selected_row"])
-            
-            st.session_state.clicked_row_idx = clicked_index
+    # Run JavaScript globally so it can easily see across all layout columns 
+    st.components.v1.html(""" 
+    <script> 
+    setTimeout(() => { 
+        const tableRows = window.parent.document.querySelectorAll('.stTable tbody tr'); 
+        tableRows.forEach((row, index) => { 
+            row.addEventListener('click', () => { 
+                const url = new URL(window.parent.location.href); 
+                url.searchParams.set('selected_row', index); 
+                window.parent.location.href = url.href; 
+            }); 
+        }); 
+    }, 500); // Increased slightly to 500ms to guarantee DOM is fully interactive
+    </script> 
+    """, height=0) 
 
-            clicked_asteroid_name = asteroid_data.at[clicked_index, "Name"]
+    # 3. Capture the URL click event immediately 
+    query_params = st.query_params 
 
-            st.session_state.selcted_name = clicked_asteroid_name
-    
-            collect_asteroid_data.text_file(clicked_asteroid_name)
+    if "selected_row" in query_params: 
+        clicked_index = int(query_params["selected_row"]) 
+        
+        # Extract name and save to memory permanently 
+        clicked_asteroid_name = asteroid_data.at[clicked_index, "Name"] 
+        st.session_state.selected_name = clicked_asteroid_name 
+        
+        # Generate the text file right here on click 
+        collect_asteroid_data.text_file(clicked_asteroid_name)
+        
+        # 🟢 CRITICAL FIX 2: Clear the parameter immediately after reading it!
+        # This cleans up your browser URL and prevents a broken refresh loop.
+        st.query_params.clear()
+        st.rerun()
 
-            with open("report.txt", "r") as file:
-                file_contents = file.read()
-                
-            st.code(file_contents)
+    with main_col: 
+        with st.container(): 
+            st.table(asteroid_data) 
+
+    # 5. Display the report using the persistent session state 
+    # This ensures it stays on screen even after query_params disappear 
+    if st.session_state.selected_name is not None: 
+        with side_col: 
+            st.markdown(f"### 📊 Report for **{st.session_state.selected_name}**") 
+            try: 
+                with open("report.txt", "r") as file: 
+                    file_contents = file.read() 
+                st.code(file_contents) 
+            except FileNotFoundError: 
+                st.error("The file 'report.txt' was not found.")
+
     # Right side content
     with side_col:
         maximum_threat = collect_asteroid_data.maximun_potential_threat()
