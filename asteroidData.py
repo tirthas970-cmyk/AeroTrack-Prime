@@ -127,6 +127,7 @@ class CollectAsteroidData:
 
     def text_file(self, asteroid_name):
 
+        #prepare info
         self.get_data()
 
         try:
@@ -139,6 +140,13 @@ class CollectAsteroidData:
         month = date.strftime("%B")
         day = date.day
         time = date.strftime("%H:%M")
+
+        simulate_asteroid = MockAsteroidEngine(radius=self.size_list[asteroid_index]/2, speed=self.speed_list[asteroid_index])
+        simulate_asteroid.calculate_path
+
+
+
+
         with open("report.txt", "w", encoding="utf-8") as file:
     
             file.write(f"""===============================================================                   
@@ -157,8 +165,9 @@ Closest Approach: {self.close_approach_list[asteroid_index]}
 TRAJECTORY ANALYSIS
 -----------------------
 Impact Probability:
-Path Intersects Earth:
+Path Intersects Earth: {simulate_asteroid.calculate_path()} //TO DO MAYBR CHANGE THIS (ANGLE IS ALWAYS 0)
 Time of Closest Approach:
+Max Potential Energy: {simulate_asteroid.calculate_potential_energy()} mt
 Impact Time:
 
 HISTORICAL DATA:

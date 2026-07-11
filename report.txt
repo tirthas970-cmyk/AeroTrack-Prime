@@ -1,6 +1,6 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: July, 11, 12:24
+Generated: July, 11, 12:40
 ================================================================    
 
 OBJECT INFORMATION
@@ -14,8 +14,9 @@ Closest Approach: 2026-Jul-11 06:06
 TRAJECTORY ANALYSIS
 -----------------------
 Impact Probability:
-Path Intersects Earth:
+Path Intersects Earth: hit //TO DO MAYBR CHANGE THIS (ANGLE IS ALWAYS 0)
 Time of Closest Approach:
+Max Potential Energy: 17.83 mt
 Impact Time:
 
 HISTORICAL DATA:
