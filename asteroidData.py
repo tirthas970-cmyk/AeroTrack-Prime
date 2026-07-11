@@ -21,6 +21,8 @@ class CollectAsteroidData:
         self.size_list = []
         self.is_hazardous_list = []
         self.miss_distance = []
+        self.id_list = []
+        self.close_approach_list = []
 
     def get_data(self):
 
@@ -38,6 +40,8 @@ class CollectAsteroidData:
                 
                 for asteroid in asteroids_info: 
                     name = asteroid["name"]
+                    id = asteroid["id"]
+                    closest_approach = asteroid["close_approach_data"][0]["close_approach_date_full"]
 
                     #name is formatted like this: (name)
                     #remove the ()
@@ -65,6 +69,8 @@ class CollectAsteroidData:
                     self.speed_list.append(velocity)
                     self.is_hazardous_list.append(status)
                     self.miss_distance.append(asteroid_miss_distance)
+                    self.id_list.append(id)
+                    self.close_approach_list.append(closest_approach)
 
                     #return name_list, size_list, speed_list
          
@@ -120,6 +126,14 @@ class CollectAsteroidData:
     
 
     def text_file(self, asteroid_name):
+
+        self.get_data()
+
+        try:
+            asteroid_index = self.name_list.index(asteroid_name)
+        except ValueError:
+            asteroid_index = 0
+        
         date = datetime.datetime.now()
 
         month = date.strftime("%B")
@@ -134,13 +148,11 @@ Generated: {month}, {day}, {time}
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID:
-Designation:
-Discovered:
-Size:
-Velocity:
-Closest Approach:
-Approach (smth):
+Asteroid ID: {self.id_list[asteroid_index]}
+Asteroid Name: {asteroid_name}
+Size: {self.size_list[asteroid_index]} meters
+Velocity: {self.speed_list[asteroid_index]} mph
+Closest Approach: {self.close_approach_list[asteroid_index]}
 
 TRAJECTORY ANALYSIS
 -----------------------

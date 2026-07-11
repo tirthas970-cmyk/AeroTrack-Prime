@@ -1,17 +1,15 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: July, 10, 17:23
+Generated: July, 11, 12:24
 ================================================================    
 
-ObJECT INFORMATION
+OBJECT INFORMATION
 --------------------
-Asteroid ID:
-Designation:
-Discovered:
-Size:
-Velocity:
-Closest Approach:
-Approach (smth):
+Asteroid ID: 3365951
+Asteroid Name: 2007 AA2
+Size: 71.4562101727 meters
+Velocity: 16136.8667151872 mph
+Closest Approach: 2026-Jul-11 06:06
 
 TRAJECTORY ANALYSIS
 -----------------------
@@ -25,7 +23,7 @@ HISTORICAL DATA:
 Previous Observations: 
 First Observed:
 Known Passages:
-Orbit TYpe:
+Orbit Type:
 
 
 RECOMMENDATION:
