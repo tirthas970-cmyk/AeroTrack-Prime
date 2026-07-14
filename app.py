@@ -183,10 +183,61 @@ else:
         height=0
     )
 
-    # 5. Display the report using the persistent session state
-    if st.session_state.selected_name is not None:
-        with side_col:
-            st.markdown(f"### 📊 Report for **{st.session_state.selected_name}**")
+
+    # Right side content
+    with side_col:
+        tab1, tab2 = st.tabs(["⚠️ Threat Assessment", "📊 Detailed Report"])
+        with tab1:
+            maximum_threat = collect_asteroid_data.maximun_potential_threat()
+            
+            panel_key = "threat_panel" 
+            if maximum_threat:
+                panel_key = "threat_panel"
+            else:
+                panel_key = "clear_panel"
+
+            with st.container(key=panel_key):
+                # High-impact Header with warning icon
+                
+                if maximum_threat:
+                    st.markdown("### ⚠️ CRITICAL THREAT DETECTED")
+
+                    st.caption("Maximum Potential Kinetic Energy Impact Analysis")
+                    st.divider()
+                    
+                    st.markdown(f"## **{maximum_threat['Name'].upper()}**")
+                    
+                    # Dynamic Threat Level Badge based on Megatons
+                    energy = maximum_threat['Energy']
+                    if energy > 1000:
+                        st.error("🚨 THREAT LEVEL: PLANETARY DEVASTATION")
+                    elif energy > 50:
+                        st.warning("🟠 THREAT LEVEL: REGIONAL EXTINCTION")
+                    else:
+                        st.info("🟡 THREAT LEVEL: METROPOLITAN IMPACT")
+                        
+                    st.write("") 
+                    
+                    # Sub-metrics nested neatly within the right column container
+                    m_col1, m_col2 = st.columns(2)
+                    with m_col1:
+                        st.metric(label="⚡ POTENTIAL ENERGY", value=f"{energy:,.2f} MT")
+                        st.metric(label="📏 DIAMETER", value=f"{round(maximum_threat['Size'], 3)} meters")
+                    with m_col2:
+                        st.metric(label="🚀 VELOCITY", value=f"{round(maximum_threat['Speed'], 3)} mph")
+                        
+                    st.divider()
+                    if energy > 50:
+                        tsar_bomba_equiv = int(energy / 50) 
+                    
+                    else:
+                        tsar_bomba_equiv = 1
+                    st.markdown(f"Estimated destructive yield is equivalent to detonating *{tsar_bomba_equiv:,} Tsar Bomba(s)*, the most powerful and destructive nuclear weapom ever,  simultaneously.")
+                else:
+                    st.success("🌌 Deep space scans clear. No immediate threats detected.")
+        with tab2:
+            if st.session_state.selected_name is not None:
+                st.markdown(f"### 📊 Report for **{st.session_state.selected_name}**")
             try:
                 with open("report.txt", "r") as file:
                     file_contents = file.read()
@@ -194,56 +245,6 @@ else:
             except FileNotFoundError:
                 st.error("The file report.txt was not found.")
 
-    # Right side content
-    with side_col:
-        maximum_threat = collect_asteroid_data.maximun_potential_threat()
-        
-        panel_key = "threat_panel" 
-        if maximum_threat:
-            panel_key = "threat_panel"
-        else:
-            panel_key = "clear_panel"
-
-        with st.container(key=panel_key):
-            # High-impact Header with warning icon
-            
-            if maximum_threat:
-                st.markdown("### ⚠️ CRITICAL THREAT DETECTED")
-
-                st.caption("Maximum Potential Kinetic Energy Impact Analysis")
-                st.divider()
-                
-                st.markdown(f"## **{maximum_threat['Name'].upper()}**")
-                
-                # Dynamic Threat Level Badge based on Megatons
-                energy = maximum_threat['Energy']
-                if energy > 1000:
-                    st.error("🚨 THREAT LEVEL: PLANETARY DEVASTATION")
-                elif energy > 50:
-                    st.warning("🟠 THREAT LEVEL: REGIONAL EXTINCTION")
-                else:
-                    st.info("🟡 THREAT LEVEL: METROPOLITAN IMPACT")
-                    
-                st.write("") 
-                
-                # Sub-metrics nested neatly within the right column container
-                m_col1, m_col2 = st.columns(2)
-                with m_col1:
-                    st.metric(label="⚡ POTENTIAL ENERGY", value=f"{energy:,.2f} MT")
-                    st.metric(label="📏 DIAMETER", value=f"{round(maximum_threat['Size'], 3)} meters")
-                with m_col2:
-                    st.metric(label="🚀 VELOCITY", value=f"{round(maximum_threat['Speed'], 3)} mph")
-                    
-                st.divider()
-                if energy > 50:
-                    tsar_bomba_equiv = int(energy / 50) 
-                
-                else:
-                    tsar_bomba_equiv = 1
-                st.markdown(f"Estimated destructive yield is equivalent to detonating *{tsar_bomba_equiv:,} Tsar Bomba(s)*, the most powerful and destructive nuclear weapom ever,  simultaneously.")
-            else:
-                st.success("🌌 Deep space scans clear. No immediate threats detected.")
-            
             
     st.write("") 
     back_btn, next_btn = st.columns([2.5, .75])
