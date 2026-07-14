@@ -1,22 +1,22 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: July, 11, 13:15
+Generated: July, 14, 11:11
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 3365951
-Asteroid Name: 2007 AA2
-Size: 71.4562101727 meters
-Velocity: 16136.8667151872 mph
-Closest Approach: 2026-Jul-11 06:06
+Asteroid ID: 3457840
+Asteroid Name: 2009 HA21
+Size: 401.8277992159 meters
+Velocity: 76313.8228167332 mph
+Closest Approach: 2026-Jul-16 21:05
 
 TRAJECTORY ANALYSIS
 -----------------------
 Impact Probability:
 Path Intersects Earth: hit //TO DO MAYBR CHANGE THIS (ANGLE IS ALWAYS 0)
 Time of Closest Approach:
-Max Potential Energy: 17.83 mt
+Max Potential Energy: 70929.12 mt
 Impact Time:
 
 HISTORICAL DATA:

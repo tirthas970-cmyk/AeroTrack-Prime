@@ -3,6 +3,7 @@ from datetime import timedelta, date
 from asteroidData import CollectAsteroidData 
 from TrajectoryEngine import MockAsteroidEngine
 from Markdown import Markdown
+import streamlit.components.v1 as components
 st.set_page_config(layout="wide")
 
 
@@ -104,78 +105,94 @@ elif st.session_state.next:
 #table + panel
 else:
     
-    st.markdown(
-    """
-    <div style="position: absolute; top: -60px; left: 0px; color: #F8FAFC; font-family: Helvetica; font-size: 24px; font-weight: bold; letter-spacing: 1px; white-space: nowrap; z-index: 999999;
-        text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);">
-        🚀 AeroTrack-Prime
-    </div>
-    """, 
-    unsafe_allow_html=True
-)
+    st.markdown( """ <div style="position: absolute; top: -60px; left: 0px; color: #F8FAFC; font-family: Helvetica; font-size: 24px; font-weight: bold; letter-spacing: 1px; white-space: nowrap; z-index: 999999; text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, unsafe_allow_html=True )
 
-    asteroid_data = collect_asteroid_data.get_table()
+    asteroid_data = collect_asteroid_data.get_table() 
 
     # 1. CLEAN SIDE-BY-SIDE COLUMN LAYOUT
-    # Generates two clean container pillars (60% table area, 40% threat display)
     main_col, side_col = st.columns([3, 2]) 
 
-    st.markdown(""" 
-    <style> 
-    .stTable tbody tr { cursor: pointer; transition: background-color 0.2s ease; } 
-    .stTable tbody tr:hover { background-color: rgba(0, 210, 255, 0.15) !important; } 
-    </style> 
-    """, unsafe_allow_html=True) 
+    # Table Hover effects
+    st.markdown("""
+    <style>
+    .stTable tbody tr { cursor: pointer; transition: background-color 0.2s ease; }
+    .stTable tbody tr:hover { background-color: rgba(0, 210, 255, 0.15) !important; }
+    </style>
+    """, unsafe_allow_html=True)
 
-    # Run JavaScript globally so it can easily see across all layout columns 
-    st.components.v1.html(""" 
-    <script> 
-    setTimeout(() => { 
-        const tableRows = window.parent.document.querySelectorAll('.stTable tbody tr'); 
-        tableRows.forEach((row, index) => { 
-            row.addEventListener('click', () => { 
-                const url = new URL(window.parent.location.href); 
-                url.searchParams.set('selected_row', index); 
-                window.parent.location.href = url.href; 
-            }); 
-        }); 
-    }, 500); // Increased slightly to 500ms to guarantee DOM is fully interactive
-    </script> 
-    """, height=0) 
+    # 2. Render table inside main_col first
+    with main_col:
+        with st.container():
+            st.table(asteroid_data)
 
-    # 3. Capture the URL click event immediately 
-    query_params = st.query_params 
+    # 3. CRITICAL CSS FIX: Inject absolute suppression rules before rendering the buttons
+    # This forces Streamlit to completely hide the buttons and collapse their height to 0px
+    st.markdown(
+        """
+        <style>
+        div[data-testid="stVerticalBlock"] > div:has(.hidden-btn-container),
+        .hidden-btn-container,
+        div[data-testid="stButton"]:has(button[key^="hid_btn_"]) {
+            display: none !important;
+            position: absolute !important;
+            height: 0px !important;
+            width: 0px !important;
+            overflow: hidden !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
-    if "selected_row" in query_params: 
-        clicked_index = int(query_params["selected_row"]) 
-        
-        # Extract name and save to memory permanently 
-        clicked_asteroid_name = asteroid_data.at[clicked_index, "Name"] 
-        st.session_state.selected_name = clicked_asteroid_name 
-        
-        # Generate the text file right here on click 
-        collect_asteroid_data.text_file(clicked_asteroid_name)
-        
-        # 🟢 CRITICAL FIX 2: Clear the parameter immediately after reading it!
-        # This cleans up your browser URL and prevents a broken refresh loop.
-        st.query_params.clear()
-        st.rerun()
+    # Render buttons in a designated stealth container wrapper
+    with st.container():
+        st.markdown('<div class="hidden-btn-container">', unsafe_allow_html=True)
+        for idx in range(len(asteroid_data)):
+            if st.button(f"click_row_{idx}", key=f"hid_btn_{idx}"):
+                clicked_asteroid_name = asteroid_data.iloc[idx]["Name"] 
+                st.session_state.selected_name = clicked_asteroid_name
+                collect_asteroid_data.text_file(clicked_asteroid_name)
+                st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    with main_col: 
-        with st.container(): 
-            st.table(asteroid_data) 
+    # 4. Inject Javascript tracker targeting parent scope components
+    components.html(
+        """
+        <script>
+        setTimeout(() => {
+            const tableRows = window.parent.document.querySelectorAll('.stTable tbody tr');
+            tableRows.forEach((row, index) => {
+                if (!row.dataset.hasClick) {
+                    row.dataset.hasClick = "true";
+                    row.addEventListener('click', () => {
+                        const buttons = window.parent.document.querySelectorAll('button');
+                        for (let btn of buttons) {
+                            if (btn.innerText.trim() === `click_row_${index}`) {
+                                btn.click();
+                                break;
+                            }
+                        }
+                    });
+                }
+            });
+        }, 500); 
+        </script>
+        """,
+        height=0
+    )
 
-    # 5. Display the report using the persistent session state 
-    # This ensures it stays on screen even after query_params disappear 
-    if st.session_state.selected_name is not None: 
-        with side_col: 
-            st.markdown(f"### 📊 Report for **{st.session_state.selected_name}**") 
-            try: 
-                with open("report.txt", "r") as file: 
-                    file_contents = file.read() 
-                st.code(file_contents) 
-            except FileNotFoundError: 
-                st.error("The file 'report.txt' was not found.")
+    # 5. Display the report using the persistent session state
+    if st.session_state.selected_name is not None:
+        with side_col:
+            st.markdown(f"### 📊 Report for **{st.session_state.selected_name}**")
+            try:
+                with open("report.txt", "r") as file:
+                    file_contents = file.read()
+                st.code(file_contents)
+            except FileNotFoundError:
+                st.error("The file report.txt was not found.")
 
     # Right side content
     with side_col:
