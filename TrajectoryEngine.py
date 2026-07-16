@@ -1,5 +1,14 @@
 import math
 
+from enum import Enum
+
+class AsteroidStatus(Enum):
+    HIT = "HIT"
+    MISS = "MISS"
+    LOST = "LOST"
+    STABLE = "STABLE"
+
+
 class MockAsteroidEngine:
     def __init__(self, radius,speed, angle=0):
         self.radius = radius
@@ -82,16 +91,16 @@ class MockAsteroidEngine:
 
             if r <= self.EARTH_RADIUS:
                 self.closest_aproach_dist = round(min_approach_dist, 2)
-                return "hit"
+                return AsteroidStatus.HIT
             elif moving_away and r > self.EARTH_RADIUS * 3:
                 if min_approach_dist < initial_distance:
                     self.closest_aproach_dist = round(min_approach_dist, 2)
-                    return "miss"
+                    return AsteroidStatus.MISS
                 else:
-                    return "Lost"
+                    return AsteroidStatus.LOST
                             
             if steps >= max_steps:
-                return "stable"
+                return AsteroidStatus.STABLE
 
     def calculate_potential_energy(self):
 

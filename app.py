@@ -1,7 +1,7 @@
 import streamlit as st
 from datetime import timedelta, date
 from asteroidData import CollectAsteroidData 
-from TrajectoryEngine import MockAsteroidEngine
+from TrajectoryEngine import AsteroidStatus, MockAsteroidEngine
 from Markdown import Markdown
 import streamlit.components.v1 as components
 st.set_page_config(layout="wide")
@@ -76,22 +76,26 @@ elif st.session_state.next:
             with sim_path:
                 # Wrap everything inside this column in the new neon blue panel
                 with st.container(key="sim_path_panel"):
+
+                    
                     if st.button("Simulate Path"):
                         asteroid_path = asteroid_simulation.calculate_path()
-                        if asteroid_path == "hit":
-                            st.error("ASTEROID HITS EARTH!")
+
+                        match asteroid_path:
+                            case AsteroidStatus.HIT:
+                                st.error("ASTEROID HITS EARTH!")
+                            case AsteroidStatus.MISS:
+                                st.warning("MISS! Asteroid flew past Earth!")
+                            case AsteroidStatus.LOST:
+                                st.success("Lost in space! Flew directly away")
+                            case _:
+                                st.info("Simulation Timeout: Asteroid entered a stable orbit or calculations timed out")
+                    
+                        if asteroid_path in [AsteroidStatus.HIT, AsteroidStatus.MISS, AsteroidStatus.LOST]:
                             st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
                             st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")
-                        elif asteroid_path == "miss":
-                            st.warning("MISS! Asteroid flew past Earth!")
-                            st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")
-                            st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
-                        elif asteroid_path == "Lost":
-                            st.success("Lost in space! Flew directly away")
-                            st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
-                        else:
-                            st.info("Simulation Timeout: Asteroid entered a stable orbit or calculations timed out")
    
+
     if st.button("Back to terminal"):
         st.session_state.next = False
         st.rerun()
