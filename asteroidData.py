@@ -54,8 +54,7 @@ class CollectAsteroidData:
                     velocity = float(asteroid["close_approach_data"][0]["relative_velocity"]["miles_per_hour"])
         
                     #miss distance:
-                    asteroid_miss_distance = float(asteroid["close_approach_data"][0]["miss_distance"]["kilometers"])
-                    #miss_distance_km = asteroid_miss_distance["kilometers"]
+                    asteroid_miss_distance = float(asteroid["close_approach_data"][0]["miss_distance"]["miles"])
 
                     is_hazardous = asteroid["is_potentially_hazardous_asteroid"]
                     
@@ -72,7 +71,6 @@ class CollectAsteroidData:
                     self.id_list.append(id)
                     self.close_approach_list.append(closest_approach)
 
-                    #return name_list, size_list, speed_list
          
         else:
             print(f"NOT WORKING  {response.status_code}")
@@ -141,10 +139,13 @@ class CollectAsteroidData:
         day = date.day
         time = date.strftime("%H:%M")
 
-        simulate_asteroid = MockAsteroidEngine(radius=self.size_list[asteroid_index]/2, speed=self.speed_list[asteroid_index])
+        #calcualte angle --> tan(angle) = miss distance/relative velocity
+
+        angle = math.round(math.degrees(math.atan(self.miss_distance[asteroid_index]/self.speed_list[asteroid_index])), 2)
+
+
+        simulate_asteroid = MockAsteroidEngine(radius=self.size_list[asteroid_index]/2, speed=self.speed_list[asteroid_index] * 0.44704, angle=0)
         simulate_asteroid.calculate_path
-
-
 
 
         with open("report.txt", "w", encoding="utf-8") as file:
@@ -165,7 +166,7 @@ Closest Approach: {self.close_approach_list[asteroid_index]}
 TRAJECTORY ANALYSIS
 -----------------------
 Impact Probability:
-Path Intersects Earth: {simulate_asteroid.calculate_path()} //TO DO MAYBR CHANGE THIS (ANGLE IS ALWAYS 0)
+Path Intersects Earth: {simulate_asteroid.calculate_path()}
 Time of Closest Approach:
 Max Potential Energy: {simulate_asteroid.calculate_potential_energy()} mt
 Impact Time:

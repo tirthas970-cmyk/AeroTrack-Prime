@@ -91,12 +91,6 @@ elif st.session_state.next:
                             st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
                         else:
                             st.info("Simulation Timeout: Asteroid entered a stable orbit or calculations timed out")
-            
-            with other_panel:
-                with open("report.txt", "r") as file:
-                    file_contents = file.read()
-                
-                st.code(file_contents)
    
     if st.button("Back to terminal"):
         st.session_state.next = False
