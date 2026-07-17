@@ -147,7 +147,6 @@ class CollectAsteroidData:
         simulate_asteroid = MockAsteroidEngine(radius=self.size_list[asteroid_index]/2, speed=self.speed_list[asteroid_index] * 0.44704, angle=0)
         simulate_asteroid.calculate_path
 
-
         with open("report.txt", "w", encoding="utf-8") as file:
     
             file.write(f"""===============================================================                   
@@ -167,9 +166,7 @@ TRAJECTORY ANALYSIS
 -----------------------
 Impact Probability:
 Path Intersects Earth: {simulate_asteroid.calculate_path()}
-Time of Closest Approach:
 Max Potential Energy: {simulate_asteroid.calculate_potential_energy()} mt
-Impact Time:
 
 HISTORICAL DATA:
 --------------------
