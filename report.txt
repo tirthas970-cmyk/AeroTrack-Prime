@@ -1,21 +1,21 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: July, 17, 17:05
+Generated: July, 17, 17:07
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 3756946
-Asteroid Name: 2016 PC8
-Size: 68.2401509401 meters
-Velocity: 12696.7382402738 mph
-Closest Approach: 2026-Jul-19 19:15
+Asteroid ID: 3760059
+Asteroid Name: 2016 SH35
+Size: 62.2357573367 meters
+Velocity: 38566.7796991649 mph
+Closest Approach: 2026-Jul-19 09:32
 Is Hazardous: ❌
 
 TRAJECTORY ANALYSIS
 -----------------------
-Path Intersects Earth: AsteroidStatus.MISS
-Max Potential Energy: 1.92 mt
+Path Intersects Earth: AsteroidStatus.LOST
+Max Potential Energy: 13.45 mt
 
 AI Composition Analysis 
 --------------------------

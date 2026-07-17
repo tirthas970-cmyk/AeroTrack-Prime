@@ -1,7 +1,7 @@
 import streamlit as st
 from datetime import timedelta, date
 from asteroidData import CollectAsteroidData 
-from TrajectoryEngine import AsteroidStatus, MockAsteroidEngine
+from TrajectoryEngine import MockAsteroidEngine
 from Markdown import Markdown
 import streamlit.components.v1 as components
 st.set_page_config(layout="wide")
@@ -76,26 +76,28 @@ elif st.session_state.next:
             with sim_path:
                 # Wrap everything inside this column in the new neon blue panel
                 with st.container(key="sim_path_panel"):
-
-                    
                     if st.button("Simulate Path"):
                         asteroid_path = asteroid_simulation.calculate_path()
-
-                        match asteroid_path:
-                            case AsteroidStatus.HIT:
-                                st.error("ASTEROID HITS EARTH!")
-                            case AsteroidStatus.MISS:
-                                st.warning("MISS! Asteroid flew past Earth!")
-                            case AsteroidStatus.LOST:
-                                st.success("Lost in space! Flew directly away")
-                            case _:
-                                st.info("Simulation Timeout: Asteroid entered a stable orbit or calculations timed out")
-                    
-                        if asteroid_path in [AsteroidStatus.HIT, AsteroidStatus.MISS, AsteroidStatus.LOST]:
+                        if asteroid_path == "hit":
+                            st.error("ASTEROID HITS EARTH!")
                             st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
                             st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")
+                        elif asteroid_path == "miss":
+                            st.warning("MISS! Asteroid flew past Earth!")
+                            st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")
+                            st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
+                        elif asteroid_path == "Lost":
+                            st.success("Lost in space! Flew directly away")
+                            st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
+                        else:
+                            st.info("Simulation Timeout: Asteroid entered a stable orbit or calculations timed out")
+            
+            with other_panel:
+                with open("report.txt", "r") as file:
+                    file_contents = file.read()
+                
+                st.code(file_contents)
    
-
     if st.button("Back to terminal"):
         st.session_state.next = False
         st.rerun()
@@ -103,19 +105,7 @@ elif st.session_state.next:
 #table + panel
 else:
     
-    st.markdown( """ 
-<div style="position: absolute; top: -60px; left: 0px; color: #F8FAFC; font-family: Helvetica; 
-font-size: 28px; font-weight: bold; letter-spacing: 1px; white-space: nowrap; z-index: 999999; 
-text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, unsafe_allow_html=True )
-
-    st.markdown(
-    "<div style='text-align: center;'><h5>☄️Live Asteroid Data From NASA</h5></div>", 
-    unsafe_allow_html=True) 
-    st.markdown(
-    "<div style='text-align: center; font-size: 15px; color: #F8FAFC;'>To get a detailed assessment of an asteroid, click on the asteroid and then click <i>Detailed Report</i> on the right-hand panel</div>", 
-    unsafe_allow_html=True)    
-
-    st.write("") #empty space
+    st.markdown( """ <div style="position: absolute; top: -60px; left: 0px; color: #F8FAFC; font-family: Helvetica; font-size: 24px; font-weight: bold; letter-spacing: 1px; white-space: nowrap; z-index: 999999; text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, unsafe_allow_html=True )
 
     asteroid_data = collect_asteroid_data.get_table() 
 
@@ -132,7 +122,7 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
 
     # 2. Render table inside main_col first
     with main_col:
-        with st.container():    
+        with st.container():
             st.table(asteroid_data)
 
     # 3. CRITICAL CSS FIX: Inject absolute suppression rules before rendering the buttons
@@ -246,11 +236,10 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
                 else:
                     st.success("🌌 Deep space scans clear. No immediate threats detected.")
         with tab2:
-            
             if st.session_state.selected_name is not None:
                 st.markdown(f"### 📊 Report for **{st.session_state.selected_name}**")
             try:
-                with open("report.txt", "r", encoding="utf-8") as file:
+                with open("report.txt", "r", encoding='utf-8') as file:
                     file_contents = file.read()
                 st.code(file_contents)
             except FileNotFoundError:
