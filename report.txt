@@ -1,21 +1,21 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: July, 17, 17:07
+Generated: July, 17, 17:23
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 3760059
-Asteroid Name: 2016 SH35
-Size: 62.2357573367 meters
-Velocity: 38566.7796991649 mph
-Closest Approach: 2026-Jul-19 09:32
+Asteroid ID: 3843105
+Asteroid Name: 2019 MX3
+Size: 215.7943048444 meters
+Velocity: 8959.7026350496 mph
+Closest Approach: 2026-Jul-18 12:12
 Is Hazardous: ❌
 
 TRAJECTORY ANALYSIS
 -----------------------
 Path Intersects Earth: AsteroidStatus.LOST
-Max Potential Energy: 13.45 mt
+Max Potential Energy: 30.26 mt
 
 AI Composition Analysis 
 --------------------------

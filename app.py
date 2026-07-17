@@ -18,6 +18,10 @@ collect_asteroid_data = CollectAsteroidData(API_KEY, today, next_days)
 markdown = Markdown()
 markdown.markdown()
 
+
+if "cached_report" not in st.session_state:
+    st.session_state.cached_report = ""
+
 if 'go' not in st.session_state:
     st.session_state.go = False
 
@@ -154,6 +158,12 @@ else:
                 clicked_asteroid_name = asteroid_data.iloc[idx]["Name"] 
                 st.session_state.selected_name = clicked_asteroid_name
                 collect_asteroid_data.text_file(clicked_asteroid_name)
+                 # 2. Force an immediate file read right here, BEFORE the rerun cuts off execution
+                try:
+                    with open("report.txt", "r", encoding="utf-8") as file:
+                        st.session_state.cached_report = file.read()
+                except FileNotFoundError:
+                    st.session_state.cached_report = "Error generating report file."
                 st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -238,12 +248,12 @@ else:
         with tab2:
             if st.session_state.selected_name is not None:
                 st.markdown(f"### 📊 Report for **{st.session_state.selected_name}**")
-            try:
-                with open("report.txt", "r", encoding='utf-8') as file:
-                    file_contents = file.read()
-                st.code(file_contents)
-            except FileNotFoundError:
-                st.error("The file report.txt was not found.")
+          
+            if st.session_state.cached_report:
+                st.code(st.session_state.cached_report)
+            else:
+                st.info("Generating report data...")
+
 
             
     st.write("") 
