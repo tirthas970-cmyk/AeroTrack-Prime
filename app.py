@@ -246,10 +246,11 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
                 else:
                     st.success("🌌 Deep space scans clear. No immediate threats detected.")
         with tab2:
+            
             if st.session_state.selected_name is not None:
                 st.markdown(f"### 📊 Report for **{st.session_state.selected_name}**")
             try:
-                with open("report.txt", "r") as file:
+                with open("report.txt", "r", encoding="utf-8") as file:
                     file_contents = file.read()
                 st.code(file_contents)
             except FileNotFoundError:

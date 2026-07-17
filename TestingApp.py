@@ -11,8 +11,9 @@ API_KEY = st.secrets["nasa_key"]
 today = date.today()
 next_days = today + timedelta(days=3)
 
+
 collect_asteroid_data = CollectAsteroidData(API_KEY, today, next_days)
-collect_asteroid_data.text_file("2007 AA2")
+collect_asteroid_data.text_file("2018 LG4")
 
 import streamlit as st
 import pandas as pd

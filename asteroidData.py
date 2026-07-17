@@ -141,11 +141,11 @@ class CollectAsteroidData:
 
         #calcualte angle --> tan(angle) = miss distance/relative velocity
 
-        angle = math.round(math.degrees(math.atan(self.miss_distance[asteroid_index]/self.speed_list[asteroid_index])), 2)
+        angle = round(math.degrees(math.atan(self.miss_distance[asteroid_index]/self.speed_list[asteroid_index])), 2)
 
 
-        simulate_asteroid = MockAsteroidEngine(radius=self.size_list[asteroid_index]/2, speed=self.speed_list[asteroid_index] * 0.44704, angle=0)
-        simulate_asteroid.calculate_path
+        simulate_asteroid = MockAsteroidEngine(radius=self.size_list[asteroid_index]/2, speed=self.speed_list[asteroid_index] * 0.44704, angle=angle)
+    
 
         with open("report.txt", "w", encoding="utf-8") as file:
     
@@ -161,23 +161,15 @@ Asteroid Name: {asteroid_name}
 Size: {self.size_list[asteroid_index]} meters
 Velocity: {self.speed_list[asteroid_index]} mph
 Closest Approach: {self.close_approach_list[asteroid_index]}
+Is Hazardous: {self.is_hazardous_list[asteroid_index]}
 
 TRAJECTORY ANALYSIS
 -----------------------
-Impact Probability:
 Path Intersects Earth: {simulate_asteroid.calculate_path()}
 Max Potential Energy: {simulate_asteroid.calculate_potential_energy()} mt
 
-HISTORICAL DATA:
---------------------
-Previous Observations: 
-First Observed:
-Known Passages:
-Orbit Type:
-
-
-RECOMMENDATION:
----------------
+AI Composition Analysis 
+--------------------------
 
 
 

@@ -1,34 +1,24 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: July, 15, 11:05
+Generated: July, 17, 16:48
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 3457840
-Asteroid Name: 2009 HA21
-Size: 401.8277992159 meters
-Velocity: 76313.8228167332 mph
-Closest Approach: 2026-Jul-16 21:05
+Asteroid ID: 3825168
+Asteroid Name: 2018 LG4
+Size: 23.6613750114 meters
+Velocity: 14744.3339034136 mph
+Closest Approach: 2026-Jul-17 11:18
+Is Hazardous: ❌
 
 TRAJECTORY ANALYSIS
 -----------------------
-Impact Probability:
-Path Intersects Earth: hit //TO DO MAYBR CHANGE THIS (ANGLE IS ALWAYS 0)
-Time of Closest Approach:
-Max Potential Energy: 70929.12 mt
-Impact Time:
+Path Intersects Earth: AsteroidStatus.MISS
+Max Potential Energy: 0.11 mt
 
-HISTORICAL DATA:
---------------------
-Previous Observations: 
-First Observed:
-Known Passages:
-Orbit Type:
-
-
-RECOMMENDATION:
----------------
+AI Composition Analysis 
+--------------------------
 
 
 
