@@ -1,21 +1,21 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: July, 17, 16:48
+Generated: July, 17, 17:05
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 3825168
-Asteroid Name: 2018 LG4
-Size: 23.6613750114 meters
-Velocity: 14744.3339034136 mph
-Closest Approach: 2026-Jul-17 11:18
+Asteroid ID: 3756946
+Asteroid Name: 2016 PC8
+Size: 68.2401509401 meters
+Velocity: 12696.7382402738 mph
+Closest Approach: 2026-Jul-19 19:15
 Is Hazardous: ❌
 
 TRAJECTORY ANALYSIS
 -----------------------
 Path Intersects Earth: AsteroidStatus.MISS
-Max Potential Energy: 0.11 mt
+Max Potential Energy: 1.92 mt
 
 AI Composition Analysis 
 --------------------------
