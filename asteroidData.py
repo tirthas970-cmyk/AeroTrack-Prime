@@ -4,6 +4,7 @@ import pandas as pd
 import math
 from TrajectoryEngine import MockAsteroidEngine
 import datetime
+import json
 ### TO DO: TRY- EXCEPT
 
 
@@ -23,6 +24,7 @@ class CollectAsteroidData:
         self.miss_distance = []
         self.id_list = []
         self.close_approach_list = []
+        self.absolute_mag_list = []
 
     def get_data(self):
 
@@ -56,6 +58,8 @@ class CollectAsteroidData:
                     #miss distance:
                     asteroid_miss_distance = float(asteroid["close_approach_data"][0]["miss_distance"]["miles"])
 
+                    absolute_mag = asteroid["absolute_magnitude_h"]
+
                     is_hazardous = asteroid["is_potentially_hazardous_asteroid"]
                     
                     if is_hazardous:
@@ -70,12 +74,26 @@ class CollectAsteroidData:
                     self.miss_distance.append(asteroid_miss_distance)
                     self.id_list.append(id)
                     self.close_approach_list.append(closest_approach)
-
+                    self.absolute_mag_list.append(absolute_mag)
          
         else:
             print(f"NOT WORKING  {response.status_code}")
     
-    def get_table(self):
+    #seems to be useless -> DELETE METHOD
+    def jpl_data(self, asteroid_id):
+        jpl_url = f"https://ssd-api.jpl.nasa.gov/sbdb.api?spk={asteroid_id}&phys-par=1"
+
+        response = requests.get(jpl_url)
+
+        data = response.json()
+
+        # Print all available physical parameters
+        for param in data.get('phys_par', []):
+            print(f"{param['title']} ({param['name']}): {param['value']} {param.get('units', '')}")
+
+
+      
+    def get_st_table(self):
         self.get_data()
 
         asteroid_data = pd.DataFrame(
@@ -83,12 +101,24 @@ class CollectAsteroidData:
                 "Name": self.name_list,
                 "Size (meters)": self.size_list,
                 "Speed (mph)": self.speed_list,
-                #"hazardous_status": self.is_hazardous_list
-
             }
         )
 
         return asteroid_data
+    
+    def get_csv(self):
+
+        self.get_data()
+
+        asterooid_csv_ready = pd.DataFrame(
+            {         
+                "Name": self.name_list,
+                "Size (meters)": self.size_list,
+                "Speed (mph)": self.speed_list,
+                "Miss Distance": self.miss_distance,
+                "Absolute Magnitude": self.absolute_mag_list
+            }
+        )
 
     def maximun_potential_threat(self):
 

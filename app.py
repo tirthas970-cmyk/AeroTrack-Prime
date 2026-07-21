@@ -109,9 +109,20 @@ elif st.session_state.next:
 #table + panel
 else:
     
-    st.markdown( """ <div style="position: absolute; top: -60px; left: 0px; color: #F8FAFC; font-family: Helvetica; font-size: 24px; font-weight: bold; letter-spacing: 1px; white-space: nowrap; z-index: 999999; text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, unsafe_allow_html=True )
+    st.markdown( """ 
+<div style="position: absolute; top: -60px; left: 0px; color: #F8FAFC; font-family: Helvetica; 
+font-size: 28px; font-weight: bold; letter-spacing: 1px; white-space: nowrap; z-index: 999999; 
+text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, unsafe_allow_html=True )
 
-    asteroid_data = collect_asteroid_data.get_table() 
+    st.markdown(
+    "<div style='text-align: center;'><h5>☄️Live Asteroid Data From NASA</h5></div>", 
+    unsafe_allow_html=True) 
+    st.markdown(
+    "<div style='text-align: center; font-size: 15px; color: #F8FAFC;'>To get a detailed assessment of an asteroid, click on the asteroid and then click <i>Detailed Report</i> on the right-hand panel</div>", 
+    unsafe_allow_html=True)    
+
+    st.write("") #empty space
+    asteroid_data = collect_asteroid_data.get_st_table() 
 
     # 1. CLEAN SIDE-BY-SIDE COLUMN LAYOUT
     main_col, side_col = st.columns([3, 2]) 

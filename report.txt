@@ -1,21 +1,21 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: July, 17, 17:23
+Generated: July, 19, 11:26
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 3843105
-Asteroid Name: 2019 MX3
-Size: 215.7943048444 meters
-Velocity: 8959.7026350496 mph
-Closest Approach: 2026-Jul-18 12:12
+Asteroid ID: 3457386
+Asteroid Name: 2009 HC
+Size: 69.8296682492 meters
+Velocity: 7825.4839146956 mph
+Closest Approach: 2026-Jul-20 07:08
 Is Hazardous: ❌
 
 TRAJECTORY ANALYSIS
 -----------------------
-Path Intersects Earth: AsteroidStatus.LOST
-Max Potential Energy: 30.26 mt
+Path Intersects Earth: AsteroidStatus.MISS
+Max Potential Energy: 0.78 mt
 
 AI Composition Analysis 
 --------------------------
