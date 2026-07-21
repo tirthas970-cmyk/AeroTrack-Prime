@@ -18,3 +18,4 @@ collect_asteroid_data = CollectAsteroidData(API_KEY, today, next_days)
 asteroid_id = "2000001"  # Ceres (Has diameter, albedo, mass, etc.)
 collect_asteroid_data.jpl_data(asteroid_id)
 
+collect_asteroid_data.get_csv()

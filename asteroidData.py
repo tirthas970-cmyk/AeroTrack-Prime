@@ -120,6 +120,8 @@ class CollectAsteroidData:
             }
         )
 
+        asterooid_csv_ready.to_csv('asteroid_clustering.csv', index=False)
+
     def maximun_potential_threat(self):
 
         #Find the max kinetic energy (not in mt)
