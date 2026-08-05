@@ -5,6 +5,9 @@ import math
 from TrajectoryEngine import MockAsteroidEngine
 import datetime
 import json
+import math 
+from sklearn.preprocessing import StandardScaler
+import joblib 
 ### TO DO: TRY- EXCEPT
 
 
@@ -122,13 +125,50 @@ class CollectAsteroidData:
 
         asterooid_csv_ready.to_csv('asteroid_clustering.csv', index=False)
 
+    def get_asteroid_cluster_group(self, asteroid_name):
+        self.get_data()
+
+        try:
+            asteroid_index = self.name_list.index(asteroid_name)
+        except ValueError:
+            asteroid_index = 0
+        
+        asteroid_csv_ready = pd.DataFrame(
+            {         
+                "Absolute Magnitude": [self.absolute_mag_list[asteroid_index]],
+                "Size (meters)": [math.log10(self.size_list[asteroid_index])],
+                "Speed (mph)": [self.speed_list[asteroid_index]],
+                "Miss Distance": [math.log10(self.miss_distance[asteroid_index])]
+            }
+        )
+
+        scaler = joblib.load('scaler.joblib')
+        reducer = joblib.load('umap_reducer.joblib')
+        kmeans = joblib.load('kmeans_model.joblib')
+
+        scaled_new = scaler.transform(asteroid_csv_ready)
+        umap_new = reducer.transform(scaled_new)
+        new_clusters = kmeans.predict(umap_new)
+
+        mapping = {
+    0 : "Main-Belt Giants",
+    1 : "High Velocity, Near-Earth Asteroids",
+    2 : "Outer Solar System Drifters",
+    3 : "Intermediate Near-Earth Crusiers"
+}
+
+        cluster_num = new_clusters[0]
+
+        cluster_map = mapping.get(cluster_num)
+
+        print(f"Cluster {cluster_num}: {cluster_map}")
+
     def maximun_potential_threat(self):
 
         #Find the max kinetic energy (not in mt)
          #d^3 * v^2
          #(\(d^3 \times v^2\)).
          #m/s = mph * .44704
-       
         self.get_data()
 
         kinetic_energy_list = []

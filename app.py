@@ -14,6 +14,7 @@ next_days = today + timedelta(days=3)
 
 collect_asteroid_data = CollectAsteroidData(API_KEY, today, next_days)
 
+#collect_asteroid_data.get_asteroid_cluster_group("136770 1996 PC1")
 # The aesthetic of the dashboard
 markdown = Markdown()
 markdown.markdown()

@@ -1,21 +1,21 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: July, 19, 11:26
+Generated: August, 5, 09:55
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 3457386
-Asteroid Name: 2009 HC
-Size: 69.8296682492 meters
-Velocity: 7825.4839146956 mph
-Closest Approach: 2026-Jul-20 07:08
+Asteroid ID: 2136770
+Asteroid Name: 136770 1996 PC1
+Size: 459.2402860401 meters
+Velocity: 51618.8915949479 mph
+Closest Approach: 2026-Aug-06 05:03
 Is Hazardous: ❌
 
 TRAJECTORY ANALYSIS
 -----------------------
-Path Intersects Earth: AsteroidStatus.MISS
-Max Potential Energy: 0.78 mt
+Path Intersects Earth: AsteroidStatus.LOST
+Max Potential Energy: 9681.18 mt
 
 AI Composition Analysis 
 --------------------------
