@@ -1,6 +1,6 @@
 import streamlit as st
 from datetime import timedelta, date
-from asteroidData import CollectAsteroidData 
+from AsteroidData import CollectAsteroidData 
 from TrajectoryEngine import MockAsteroidEngine
 from Markdown import Markdown
 import streamlit.components.v1 as components
@@ -123,8 +123,8 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
     unsafe_allow_html=True)    
 
     st.write("") #empty space
-    asteroid_data = collect_asteroid_data.get_st_table() 
 
+    asteroid_data = collect_asteroid_data.get_st_table() 
     # 1. CLEAN SIDE-BY-SIDE COLUMN LAYOUT
     main_col, side_col = st.columns([3, 2]) 
 

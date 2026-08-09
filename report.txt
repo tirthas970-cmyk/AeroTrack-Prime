@@ -1,21 +1,21 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: August, 5, 09:55
+Generated: August, 9, 13:10
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 2136770
-Asteroid Name: 136770 1996 PC1
-Size: 459.2402860401 meters
-Velocity: 51618.8915949479 mph
-Closest Approach: 2026-Aug-06 05:03
-Is Hazardous: ❌
+Asteroid ID: 2173561
+Asteroid Name: 173561 2000 YV137
+Size: 1264.852777541 meters
+Velocity: 36224.45057912 mph
+Closest Approach: 2026-Aug-09 05:12
+Is Hazardous: ✔️
 
 TRAJECTORY ANALYSIS
 -----------------------
-Path Intersects Earth: AsteroidStatus.LOST
-Max Potential Energy: 9681.18 mt
+Path Intersects Earth: AsteroidStatus.MISS
+Max Potential Energy: 99612.66 mt
 
 AI Composition Analysis 
 --------------------------

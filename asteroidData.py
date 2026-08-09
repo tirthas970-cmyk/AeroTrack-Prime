@@ -95,7 +95,6 @@ class CollectAsteroidData:
             print(f"{param['title']} ({param['name']}): {param['value']} {param.get('units', '')}")
 
 
-      
     def get_st_table(self):
         self.get_data()
 
