@@ -145,42 +145,33 @@ class CollectAsteroidData:
         })
 
         # Scale the data using your saved joblib scaler
-        scaler = joblib.load("scaler.joblib")
+        scaler = joblib.load("scalerv2.joblib")
         scaled_new = scaler.transform(asteroid_csv_ready.values)
 
-        # --- CRASH-PROOF TRANSLATION FOR PYTHON 3.13 ---
-        try:
-            reducer = joblib.load("umap_reducer.joblib")
-            umap_new = reducer.transform(scaled_new)
-        except Exception:
-            reducer = joblib.load("umap_reducer.joblib")
-            n_features = reducer.n_components if hasattr(reducer, 'n_components') else 2
-            umap_new = np.zeros((1, n_features), dtype=np.float64)
-            copied_vals = scaled_new[0, :min(scaled_new.shape[1], n_features)]
-            umap_new[0, :len(copied_vals)] = copied_vals
+        # Transform your dimensions 
+        reducer = joblib.load("umap_reducerv2.joblib")
+        pca_new = reducer.transform(scaled_new)
 
-        # Predict using your saved KMeans model
+        # Load your clustering model
         kmeans = joblib.load("kmeans_model.joblib")
         
-        # FIX: Force the saved KMeans model's internal arrays to float64
+        # Quick fix for older environment model artifacts
         if hasattr(kmeans, 'cluster_centers_'):
             kmeans.cluster_centers_ = np.asarray(kmeans.cluster_centers_, dtype=np.float64, order='C')
-        if hasattr(kmeans, '_n_threads'):
-            # Older scikit-learn models might look for float64 cluster centers
-            pass
 
-        # Ensure input array is float64 AND contiguous in memory
-        umap_new_double = np.asarray(umap_new, dtype=np.float64, order='C')
-        new_clusters = kmeans.predict(umap_new_double)
+        # Guard: Enforce strict float64 and contiguous C-memory alignment
+        pca_new_stable = np.asarray(pca_new, dtype=np.float64, order='C')
+        new_clusters = kmeans.predict(pca_new_stable)
 
         mapping = {
-            0: "Main-Belt Giants",
-            1: "High Velocity, Near-Earth Asteroids",
-            2: "Outer Solar System Drifters",
-            3: "Intermediate Near-Earth Cruisers"
+            0: "Intermediate Near-Earth Cruisers",      # Average across all specs, moderate distance
+            1: "High Velocity, Near-Earth Asteroids",  # Blazing fast at 50k mph, relatively small
+            2: "Main-Belt Giants",                     # Absolutely massive at nearly 60km wide
+            3: "Outer Solar System Drifters"           # Closest miss distance window, distinct speed profile
         }
         
-        cluster_num = int(new_clusters[0])
+        # Guard against shape variations (handles scalar vs array inputs safely)
+        cluster_num = int(np.atleast_1d(new_clusters)[0])
         cluster_map = mapping.get(cluster_num, "Unknown Cluster")
         print(f"Cluster {cluster_num}: {cluster_map}")
         return cluster_num
