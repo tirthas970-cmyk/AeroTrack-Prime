@@ -1,3 +1,6 @@
+import os
+os.environ['NUMBA_DISABLE_JIT'] = '1'
+
 import streamlit as st
 from datetime import timedelta, date
 from AsteroidData import CollectAsteroidData 
@@ -19,4 +22,4 @@ asteroid_id = "2000001"  # Ceres (Has diameter, albedo, mass, etc.)
 collect_asteroid_data.jpl_data(asteroid_id)
 
 
-collect_asteroid_data.get_asteroid_cluster_group("173561 2000 YV137")
+collect_asteroid_data.get_asteroid_cluster_group("2011 HH")

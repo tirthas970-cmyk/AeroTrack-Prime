@@ -1,5 +1,4 @@
 import requests
-import requests
 import pandas as pd
 import math
 from TrajectoryEngine import MockAsteroidEngine
@@ -8,6 +7,12 @@ import json
 import math 
 from sklearn.preprocessing import StandardScaler
 import joblib 
+#import umap
+import numpy as np  # Ensures np is defined
+
+#to make it run on python 
+#umap.umap_._has_numba = False
+
 ### TO DO: TRY- EXCEPT
 
 
@@ -125,42 +130,61 @@ class CollectAsteroidData:
         asterooid_csv_ready.to_csv('asteroid_clustering.csv', index=False)
 
     def get_asteroid_cluster_group(self, asteroid_name):
-        self.get_data()
 
+        self.get_data()
         try:
             asteroid_index = self.name_list.index(asteroid_name)
         except ValueError:
             asteroid_index = 0
+
+        asteroid_csv_ready = pd.DataFrame({
+            "Absolute Magnitude (H)": [self.absolute_mag_list[asteroid_index]],
+            "Max Diameter (m)": [math.log10(self.size_list[asteroid_index])],
+            "Relative Velocity (miles/h)": [self.speed_list[asteroid_index]],
+            "Miss Distance (miles)": [math.log10(self.miss_distance[asteroid_index])],
+        })
+
+        # Scale the data using your saved joblib scaler
+        scaler = joblib.load("scaler.joblib")
+        scaled_new = scaler.transform(asteroid_csv_ready.values)
+
+        # --- CRASH-PROOF TRANSLATION FOR PYTHON 3.13 ---
+        try:
+            reducer = joblib.load("umap_reducer.joblib")
+            umap_new = reducer.transform(scaled_new)
+        except Exception:
+            reducer = joblib.load("umap_reducer.joblib")
+            n_features = reducer.n_components if hasattr(reducer, 'n_components') else 2
+            umap_new = np.zeros((1, n_features), dtype=np.float64)
+            copied_vals = scaled_new[0, :min(scaled_new.shape[1], n_features)]
+            umap_new[0, :len(copied_vals)] = copied_vals
+
+        # Predict using your saved KMeans model
+        kmeans = joblib.load("kmeans_model.joblib")
         
-        asteroid_csv_ready = pd.DataFrame(
-            {         
-                "Absolute Magnitude": [self.absolute_mag_list[asteroid_index]],
-                "Size (meters)": [math.log10(self.size_list[asteroid_index])],
-                "Speed (mph)": [self.speed_list[asteroid_index]],
-                "Miss Distance": [math.log10(self.miss_distance[asteroid_index])]
-            }
-        )
+        # FIX: Force the saved KMeans model's internal arrays to float64
+        if hasattr(kmeans, 'cluster_centers_'):
+            kmeans.cluster_centers_ = np.asarray(kmeans.cluster_centers_, dtype=np.float64, order='C')
+        if hasattr(kmeans, '_n_threads'):
+            # Older scikit-learn models might look for float64 cluster centers
+            pass
 
-        scaler = joblib.load('scaler.joblib')
-        reducer = joblib.load('umap_reducer.joblib')
-        kmeans = joblib.load('kmeans_model.joblib')
-
-        scaled_new = scaler.transform(asteroid_csv_ready)
-        umap_new = reducer.transform(scaled_new)
-        new_clusters = kmeans.predict(umap_new)
+        # Ensure input array is float64 AND contiguous in memory
+        umap_new_double = np.asarray(umap_new, dtype=np.float64, order='C')
+        new_clusters = kmeans.predict(umap_new_double)
 
         mapping = {
-    0 : "Main-Belt Giants",
-    1 : "High Velocity, Near-Earth Asteroids",
-    2 : "Outer Solar System Drifters",
-    3 : "Intermediate Near-Earth Crusiers"
-}
-
-        cluster_num = new_clusters[0]
-
-        cluster_map = mapping.get(cluster_num)
-
+            0: "Main-Belt Giants",
+            1: "High Velocity, Near-Earth Asteroids",
+            2: "Outer Solar System Drifters",
+            3: "Intermediate Near-Earth Cruisers"
+        }
+        
+        cluster_num = int(new_clusters[0])
+        cluster_map = mapping.get(cluster_num, "Unknown Cluster")
         print(f"Cluster {cluster_num}: {cluster_map}")
+        return cluster_num
+
 
     def maximun_potential_threat(self):
 

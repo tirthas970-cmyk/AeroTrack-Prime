@@ -1,21 +1,21 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: August, 9, 13:10
+Generated: August, 18, 13:05
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 2173561
-Asteroid Name: 173561 2000 YV137
-Size: 1264.852777541 meters
-Velocity: 36224.45057912 mph
-Closest Approach: 2026-Aug-09 05:12
-Is Hazardous: ✔️
+Asteroid ID: 3563709
+Asteroid Name: 2011 HH
+Size: 51.7654482198 meters
+Velocity: 14983.5407757156 mph
+Closest Approach: 2026-Aug-18 05:32
+Is Hazardous: ❌
 
 TRAJECTORY ANALYSIS
 -----------------------
-Path Intersects Earth: AsteroidStatus.MISS
-Max Potential Energy: 99612.66 mt
+Path Intersects Earth: AsteroidStatus.LOST
+Max Potential Energy: 1.17 mt
 
 AI Composition Analysis 
 --------------------------
