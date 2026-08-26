@@ -19,6 +19,15 @@ collect_asteroid_data = CollectAsteroidData(API_KEY, today, next_days)
 markdown = Markdown()
 markdown.markdown()
 
+@st.dialog("🤖 Impact Assessment Panel")
+def show_ml_modal(asteroid_name):
+    st.write(f"Analyzing variables for: **{asteroid_name}**")
+    user_text = st.text_input("Enter ML Parameters or Comments:", key="modal_ml_input")
+    if user_text:
+        st.write(f"Processing input: {user_text}")
+    if st.button("Submit & Close"):
+        st.rerun()
+
 
 if "cached_report" not in st.session_state:
     st.session_state.cached_report = ""
@@ -34,6 +43,10 @@ if "clicked_row_idx" not in st.session_state:
 
 if "selected_name" not in st.session_state:
     st.session_state.selected_name = None
+
+if "show_ml_info" not in st.session_state:
+    st.session_state.show_ml_info = None
+
 
 #welcome screen 
 if not st.session_state.go:
@@ -139,7 +152,38 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
     # 2. Render table inside main_col first
     with main_col:
         with st.container():
-            st.table(asteroid_data)
+   
+            if st.session_state.show_ml_info:
+                    st.markdown(
+                f"""
+                <div style="
+                    position: absolute;
+                    top: 80px;
+                    left: 10%;
+                    width: 80%;
+                    background-color: #1E293B;
+                    border: 2px solid #00D2FF;
+                    border-radius: 8px;
+                    padding: 20px;
+                    box-shadow: 0 4px 20px rgba(0, 210, 255, 0.4);
+                    z-index: 9999;
+                ">
+                    <h3 style="color: #F8FAFC; margin-top:0;"> AI Asteroid Profile: {st.session_state.selected_name}</h3>
+                """, 
+                unsafe_allow_html=True
+                )
+
+            if st.session_state.show_ml_info:
+                if st.button("Close Panel ✖️"):
+                        st.session_state.show_ml_info = False
+                        st.rerun()
+                
+                
+            # 3. Close the custom HTML wrapper tag smoothly
+            st.markdown("</div>", unsafe_allow_html=True)
+            
+        # The table sits normally behind/underneath the absolute layer container
+        st.table(asteroid_data)
 
     # 3. CRITICAL CSS FIX: Inject absolute suppression rules before rendering the buttons
     # This forces Streamlit to completely hide the buttons and collapse their height to 0px
@@ -160,6 +204,8 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
         </style>
         """,
         unsafe_allow_html=True
+
+
     )
 
     # Render buttons in a designated stealth container wrapper
@@ -170,6 +216,8 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
                 clicked_asteroid_name = asteroid_data.iloc[idx]["Name"] 
                 st.session_state.selected_name = clicked_asteroid_name
                 collect_asteroid_data.text_file(clicked_asteroid_name)
+                st.session_state.show_ml_info = True
+
                  # 2. Force an immediate file read right here, BEFORE the rerun cuts off execution
                 try:
                     with open("report.txt", "r", encoding="utf-8") as file:
@@ -177,6 +225,7 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
                 except FileNotFoundError:
                     st.session_state.cached_report = "Error generating report file."
                 st.rerun()
+
         st.markdown('</div>', unsafe_allow_html=True)
 
     # 4. Inject Javascript tracker targeting parent scope components

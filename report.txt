@@ -1,21 +1,21 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: August, 18, 13:05
+Generated: August, 26, 18:07
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 3563709
-Asteroid Name: 2011 HH
-Size: 51.7654482198 meters
-Velocity: 14983.5407757156 mph
-Closest Approach: 2026-Aug-18 05:32
-Is Hazardous: ❌
+Asteroid ID: 3767248
+Asteroid Name: 2017 BP31
+Size: 639.7937286834 meters
+Velocity: 45745.3631813862 mph
+Closest Approach: 2026-Aug-28 23:43
+Is Hazardous: ✔️
 
 TRAJECTORY ANALYSIS
 -----------------------
-Path Intersects Earth: AsteroidStatus.LOST
-Max Potential Energy: 1.17 mt
+Path Intersects Earth: AsteroidStatus.MISS
+Max Potential Energy: 20559.15 mt
 
 AI Composition Analysis 
 --------------------------

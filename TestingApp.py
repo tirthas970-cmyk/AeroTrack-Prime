@@ -22,4 +22,4 @@ asteroid_id = "2000001"  # Ceres (Has diameter, albedo, mass, etc.)
 collect_asteroid_data.jpl_data(asteroid_id)
 
 
-collect_asteroid_data.get_asteroid_cluster_group("2011 HH")
+collect_asteroid_data.get_asteroid_cluster_group("2007 DK8")

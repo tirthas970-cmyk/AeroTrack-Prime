@@ -154,10 +154,10 @@ class CollectAsteroidData:
 
         # Load your clustering model
         kmeans = joblib.load("kmeans_model.joblib")
-        
-        # Quick fix for older environment model artifacts
+
+        #puts into flaot64
         if hasattr(kmeans, 'cluster_centers_'):
-            kmeans.cluster_centers_ = np.asarray(kmeans.cluster_centers_, dtype=np.float64, order='C')
+           kmeans.cluster_centers_ = np.asarray(kmeans.cluster_centers_, dtype=np.float64, order='C')
 
         # Guard: Enforce strict float64 and contiguous C-memory alignment
         pca_new_stable = np.asarray(pca_new, dtype=np.float64, order='C')
@@ -175,7 +175,6 @@ class CollectAsteroidData:
         cluster_map = mapping.get(cluster_num, "Unknown Cluster")
         print(f"Cluster {cluster_num}: {cluster_map}")
         return cluster_num
-
 
     def maximun_potential_threat(self):
 
