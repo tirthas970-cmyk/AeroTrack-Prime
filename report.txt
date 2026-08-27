@@ -1,21 +1,21 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: August, 26, 18:07
+Generated: August, 27, 13:56
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 3767248
-Asteroid Name: 2017 BP31
-Size: 639.7937286834 meters
-Velocity: 45745.3631813862 mph
-Closest Approach: 2026-Aug-28 23:43
+Asteroid ID: 2221455
+Asteroid Name: 221455 2006 BC10
+Size: 741.3784854083 meters
+Velocity: 42508.2671954042 mph
+Closest Approach: 2026-Aug-28 15:47
 Is Hazardous: ✔️
 
 TRAJECTORY ANALYSIS
 -----------------------
 Path Intersects Earth: AsteroidStatus.MISS
-Max Potential Energy: 20559.15 mt
+Max Potential Energy: 27622.16 mt
 
 AI Composition Analysis 
 --------------------------

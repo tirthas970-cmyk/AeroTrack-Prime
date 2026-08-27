@@ -173,8 +173,8 @@ class CollectAsteroidData:
         # Guard against shape variations (handles scalar vs array inputs safely)
         cluster_num = int(np.atleast_1d(new_clusters)[0])
         cluster_map = mapping.get(cluster_num, "Unknown Cluster")
-        print(f"Cluster {cluster_num}: {cluster_map}")
-        return cluster_num
+        return f"{cluster_num}: {cluster_map}"
+
 
     def maximun_potential_threat(self):
 

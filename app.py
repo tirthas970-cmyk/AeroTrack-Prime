@@ -151,47 +151,64 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
 
     # 2. Render table inside main_col first
     with main_col:
-        with st.container():
-   
-            if st.session_state.show_ml_info:
-                    st.markdown(
-                f"""
-                <div style="
-                    position: absolute;
-                    top: 80px;
-                    left: 10%;
-                    width: 80%;
-                    background-color: #1E293B;
-                    border: 2px solid #00D2FF;
-                    border-radius: 8px;
-                    padding: 20px;
-                    box-shadow: 0 4px 20px rgba(0, 210, 255, 0.4);
-                    z-index: 9999;
-                ">
-                    <h3 style="color: #F8FAFC; margin-top:0;"> AI Asteroid Profile: {st.session_state.selected_name}</h3>
-                """, 
-                unsafe_allow_html=True
-                )
+        # --- MOVED EXTRA CUSTOM STYLING INTO A CLEAN CSS BLOCK ---
+        st.markdown(
+            """
+            <style>
+            .custom-ml-profile {
+                background-color: #1E293B; 
+                border: 2px solid #00D2FF; 
+                border-radius: 8px; 
+                padding: 20px; 
+                box-shadow: 0 4px 20px rgba(0, 210, 255, 0.4); 
+                margin-bottom: 20px;
+                box-sizing: border-box;
+                width: 100%;
+            }
+            .custom-ml-profile h3 {
+                color: #F8FAFC; 
+                margin-top:0;
+                margin-bottom:10px;
+            }
+            .custom-ml-profile p {
+                color: #94A3B8;
+                font-size: 16px;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
 
-            if st.session_state.show_ml_info:
-                if st.button("Close Panel ✖️"):
-                        st.session_state.show_ml_info = False
-                        st.rerun()
-                
-                
-            # 3. Close the custom HTML wrapper tag smoothly
-            st.markdown("</div>", unsafe_allow_html=True)
+        if st.session_state.show_ml_info:
+            cluster = collect_asteroid_data.get_asteroid_cluster_group(st.session_state.selected_name)
             
-        # The table sits normally behind/underneath the absolute layer container
+            # FIXED: Removed position: absolute to prevent HTML layout overlapping and blocking future clicks
+            st.markdown(
+                f"""
+                <div class="custom-ml-profile">
+                    <h3>AI Asteroid Profile: {st.session_state.selected_name}</h3>
+                    <p><strong>AI Cluster:</strong> Group {cluster}</p>
+                    <p>This text block fills the box completely now without generating a slider.</p>
+                </div>
+                """, 
+                unsafe_allow_html=True,
+            )
+            
+            # FIXED TYPO: Changed st.session_state.seleced_name to st.session_state.selected_name
+            if st.button("Close Panel ✖️", key="close_ml_panel_btn"):
+                st.session_state.show_ml_info = False
+                st.session_state.selected_name = None  
+                st.rerun()
+
+        # The table sits normally under the container profile view
         st.table(asteroid_data)
 
     # 3. CRITICAL CSS FIX: Inject absolute suppression rules before rendering the buttons
-    # This forces Streamlit to completely hide the buttons and collapse their height to 0px
     st.markdown(
         """
         <style>
-        div[data-testid="stVerticalBlock"] > div:has(.hidden-btn-container),
-        .hidden-btn-container,
+        div[data-testid="stVerticalBlock"] > div:has(.hidden-btn-container), 
+        .hidden-btn-container, 
         div[data-testid="stButton"]:has(button[key^="hid_btn_"]) {
             display: none !important;
             position: absolute !important;
@@ -202,10 +219,8 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
             padding: 0 !important;
         }
         </style>
-        """,
+        """, 
         unsafe_allow_html=True
-
-
     )
 
     # Render buttons in a designated stealth container wrapper
@@ -213,27 +228,27 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
         st.markdown('<div class="hidden-btn-container">', unsafe_allow_html=True)
         for idx in range(len(asteroid_data)):
             if st.button(f"click_row_{idx}", key=f"hid_btn_{idx}"):
-                clicked_asteroid_name = asteroid_data.iloc[idx]["Name"] 
+                clicked_asteroid_name = asteroid_data.iloc[idx]["Name"]
                 st.session_state.selected_name = clicked_asteroid_name
                 collect_asteroid_data.text_file(clicked_asteroid_name)
                 st.session_state.show_ml_info = True
-
-                 # 2. Force an immediate file read right here, BEFORE the rerun cuts off execution
+                
                 try:
                     with open("report.txt", "r", encoding="utf-8") as file:
                         st.session_state.cached_report = file.read()
                 except FileNotFoundError:
                     st.session_state.cached_report = "Error generating report file."
                 st.rerun()
-
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # 4. Inject Javascript tracker targeting parent scope components
+    # 4. Inject Javascript tracker targeting parent scope
     components.html(
         """
         <script>
-        setTimeout(() => {
+        // Create a function that scans and attaches click events to unmapped rows
+        function attachTableClickListeners() {
             const tableRows = window.parent.document.querySelectorAll('.stTable tbody tr');
+            
             tableRows.forEach((row, index) => {
                 if (!row.dataset.hasClick) {
                     row.dataset.hasClick = "true";
@@ -248,11 +263,19 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
                     });
                 }
             });
-        }, 500); 
+        }
+
+        // Run immediately on load
+        attachTableClickListeners();
+
+        // Keep scanning every 400ms to instantly catch any new table instances after reruns
+        setInterval(attachTableClickListeners, 400);
         </script>
-        """,
+        """, 
         height=0
     )
+
+
 
 
     # Right side content
