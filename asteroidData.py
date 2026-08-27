@@ -175,6 +175,16 @@ class CollectAsteroidData:
         cluster_map = mapping.get(cluster_num, "Unknown Cluster")
         return f"{cluster_num}: {cluster_map}"
 
+    def get_cluster_info(cluster_num):
+        pass
+        #cluster_info_map = [
+            #{0: "Intermediate Near-Earth Cruisers", "Frequency": 42.809735, "Characteristics": }
+
+            #0    42.809735
+            #1    31.747788
+            #3    20.132743
+            #2     #5.309735
+        #]
 
     def maximun_potential_threat(self):
 

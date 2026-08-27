@@ -19,16 +19,6 @@ collect_asteroid_data = CollectAsteroidData(API_KEY, today, next_days)
 markdown = Markdown()
 markdown.markdown()
 
-@st.dialog("🤖 Impact Assessment Panel")
-def show_ml_modal(asteroid_name):
-    st.write(f"Analyzing variables for: **{asteroid_name}**")
-    user_text = st.text_input("Enter ML Parameters or Comments:", key="modal_ml_input")
-    if user_text:
-        st.write(f"Processing input: {user_text}")
-    if st.button("Submit & Close"):
-        st.rerun()
-
-
 if "cached_report" not in st.session_state:
     st.session_state.cached_report = ""
 
@@ -188,7 +178,9 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
                 <div class="custom-ml-profile">
                     <h3>AI Asteroid Profile: {st.session_state.selected_name}</h3>
                     <p><strong>AI Cluster:</strong> Group {cluster}</p>
+
                     <p>This text block fills the box completely now without generating a slider.</p>
+
                 </div>
                 """, 
                 unsafe_allow_html=True,
