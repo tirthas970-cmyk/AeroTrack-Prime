@@ -171,20 +171,26 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
 
         if st.session_state.show_ml_info:
             cluster = collect_asteroid_data.get_asteroid_cluster_group(st.session_state.selected_name)
+            cluster_info = collect_asteroid_data.get_cluster_info()
+            st.html(
+        f"""
+        <div class="custom-ml-profile">
+            <h3>AI Asteroid Profile: {st.session_state.selected_name}</h3>
+            <p><strong>AI Cluster:</strong> Group {cluster} - {cluster_info[cluster][cluster]}</p>
+            <p><strong>Cluster Characteristics:</strong></p>
+            <ul>
+                <li>{cluster_info[cluster]["Characteristic1"]}</li>
+                <li>{cluster_info[cluster]["Characteristic2"]}</li>
+                <li>{cluster_info[cluster]["Characteristic3"]}</li>
+            </ul>
+
+            <p><strong>Historical Cluster Frequency: {round(cluster_info[cluster]["Frequency"], 2)}%</strong></p>
+
             
-            # FIXED: Removed position: absolute to prevent HTML layout overlapping and blocking future clicks
-            st.markdown(
-                f"""
-                <div class="custom-ml-profile">
-                    <h3>AI Asteroid Profile: {st.session_state.selected_name}</h3>
-                    <p><strong>AI Cluster:</strong> Group {cluster}</p>
 
-                    <p>This text block fills the box completely now without generating a slider.</p>
-
-                </div>
-                """, 
-                unsafe_allow_html=True,
-            )
+        </div>
+        """
+    )
             
             # FIXED TYPO: Changed st.session_state.seleced_name to st.session_state.selected_name
             if st.button("Close Panel ✖️", key="close_ml_panel_btn"):

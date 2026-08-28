@@ -163,28 +163,43 @@ class CollectAsteroidData:
         pca_new_stable = np.asarray(pca_new, dtype=np.float64, order='C')
         new_clusters = kmeans.predict(pca_new_stable)
 
-        mapping = {
-            0: "Intermediate Near-Earth Cruisers",      # Average across all specs, moderate distance
-            1: "High Velocity, Near-Earth Asteroids",  # Blazing fast at 50k mph, relatively small
-            2: "Main-Belt Giants",                     # Absolutely massive at nearly 60km wide
-            3: "Outer Solar System Drifters"           # Closest miss distance window, distinct speed profile
-        }
-        
-        # Guard against shape variations (handles scalar vs array inputs safely)
+        #Guard against shape variations (handles scalar vs array inputs safely)
         cluster_num = int(np.atleast_1d(new_clusters)[0])
-        cluster_map = mapping.get(cluster_num, "Unknown Cluster")
-        return f"{cluster_num}: {cluster_map}"
+        return cluster_num
 
-    def get_cluster_info(cluster_num):
-        pass
-        #cluster_info_map = [
-            #{0: "Intermediate Near-Earth Cruisers", "Frequency": 42.809735, "Characteristics": }
-
-            #0    42.809735
-            #1    31.747788
-            #3    20.132743
-            #2     #5.309735
-        #]
+    def get_cluster_info(self):
+      #freqeuncy numbers are derived from the notebook
+        cluster_info_map = [
+    {
+        0: "Intermediate Near-Earth Cruisers", 
+        "Frequency": 42.809735, 
+        "Characteristic1": "Average scale: Represent the mid-sized baseline for object size and brightness", 
+        "Characteristic2": "Standard velocity: Travel at a moderate, baseline cruising speed", 
+        "Characteristic3": "Middle ground: Pass Earth at an intermediate distance compared to other groups"
+    },
+    {
+        1: "High Velocity, Near-Earth Asteroids", 
+        "Frequency": 31.747788, 
+        "Characteristic1": "Blazing speed: Move significantly faster than all other tracked objects", 
+        "Characteristic2": "Compact frame: Characterized by the smallest dimensions and faintest visibility", 
+        "Characteristic3": "Distanced transit: Maintain a wide, standard clearance gap from Earth"
+    },
+    {
+        2: "Main-Belt Giants", 
+        "Frequency": 5.309735, 
+        "Characteristic1": "Enormous bulk: Possess massive physical dimensions and highly prominent brightness", 
+        "Characteristic2": "Lumbering pace: Travel at the slowest, most sluggish speed in the dataset", 
+        "Characteristic3": "Deep space: Record the furthest orbital clearance away from Earth"
+    },
+    {
+        3: "Close-Approach Neighborhood Threats", 
+        "Frequency": 20.132743, 
+        "Characteristic1": "Tight proximity: Fly by uniquely closer to Earth than any other cluster", 
+        "Characteristic2": "Sub-compact size: Form small-to-medium physical structures with faint profiles", 
+        "Characteristic3": "Brisk transit: Maintain a steady, swift speed through our local neighborhood"
+    }
+    ]
+        return cluster_info_map
 
     def maximun_potential_threat(self):
 
