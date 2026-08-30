@@ -1,21 +1,21 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: August, 28, 13:45
+Generated: August, 30, 13:26
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 2221455
-Asteroid Name: 221455 2006 BC10
-Size: 741.3784854083 meters
-Velocity: 42508.2671954042 mph
-Closest Approach: 2026-Aug-28 15:47
-Is Hazardous: ✔️
+Asteroid ID: 3605759
+Asteroid Name: 2012 LE11
+Size: 1406.1769631325 meters
+Velocity: 22529.7703961036 mph
+Closest Approach: 2026-Aug-30 22:14
+Is Hazardous: ❌
 
 TRAJECTORY ANALYSIS
 -----------------------
 Path Intersects Earth: AsteroidStatus.MISS
-Max Potential Energy: 27622.16 mt
+Max Potential Energy: 52944.94 mt
 
 AI Composition Analysis 
 --------------------------

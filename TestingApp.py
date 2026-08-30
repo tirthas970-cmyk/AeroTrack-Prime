@@ -6,6 +6,7 @@ from datetime import timedelta, date
 from AsteroidData import CollectAsteroidData 
 from TrajectoryEngine import MockAsteroidEngine
 import pandas as pd
+from Plot import PlotNewPoint
 st.set_page_config(layout="wide")
 
 
@@ -17,9 +18,5 @@ next_days = today + timedelta(days=3)
 
 collect_asteroid_data = CollectAsteroidData(API_KEY, today, next_days)
 
-
-asteroid_id = "2000001"  # Ceres (Has diameter, albedo, mass, etc.)
-collect_asteroid_data.jpl_data(asteroid_id)
-
-
-collect_asteroid_data.get_asteroid_cluster_group("2007 DK8")
+plotter = PlotNewPoint()
+plot = plotter.plot_new_point("485823 2012 DF61")

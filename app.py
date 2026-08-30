@@ -170,7 +170,7 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
         )
 
         if st.session_state.show_ml_info:
-            cluster = collect_asteroid_data.get_asteroid_cluster_group(st.session_state.selected_name)
+            cluster = collect_asteroid_data.get_asteroid_cluster_group(st.session_state.selected_name).get("Cluster")
             cluster_info = collect_asteroid_data.get_cluster_info()
             st.html(
         f"""
@@ -183,10 +183,6 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
                 <li>{cluster_info[cluster]["Characteristic2"]}</li>
                 <li>{cluster_info[cluster]["Characteristic3"]}</li>
             </ul>
-
-            <p><strong>Historical Cluster Frequency: {round(cluster_info[cluster]["Frequency"], 2)}%</strong></p>
-
-            
 
         </div>
         """

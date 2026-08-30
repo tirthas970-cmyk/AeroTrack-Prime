@@ -5,10 +5,10 @@ from TrajectoryEngine import MockAsteroidEngine
 import datetime
 import json
 import math 
-from sklearn.preprocessing import StandardScaler
 import joblib 
 #import umap
 import numpy as np  # Ensures np is defined
+from scipy.spatial.distance import cdist
 
 #to make it run on python 
 #umap.umap_._has_numba = False
@@ -33,6 +33,7 @@ class CollectAsteroidData:
         self.id_list = []
         self.close_approach_list = []
         self.absolute_mag_list = []
+
 
     def get_data(self):
 
@@ -153,7 +154,7 @@ class CollectAsteroidData:
         pca_new = reducer.transform(scaled_new)
 
         # Load your clustering model
-        kmeans = joblib.load("kmeans_model.joblib")
+        kmeans = joblib.load("kmeans_modelv2.joblib")
 
         #puts into flaot64
         if hasattr(kmeans, 'cluster_centers_'):
@@ -165,7 +166,11 @@ class CollectAsteroidData:
 
         #Guard against shape variations (handles scalar vs array inputs safely)
         cluster_num = int(np.atleast_1d(new_clusters)[0])
-        return cluster_num
+        return {
+            "Cluster": cluster_num,
+            "point": pca_new_stable
+        }
+
 
     def get_cluster_info(self):
       #freqeuncy numbers are derived from the notebook
