@@ -2,7 +2,10 @@ import matplotlib.pyplot as plt
 from AsteroidData import CollectAsteroidData
 import streamlit as st
 from datetime import timedelta, date
-import matplotlib.pyplot as plt 
+import matplotlib
+
+matplotlib.use("TkAgg")  
+import matplotlib.pyplot as plt
 import joblib
 
 API_KEY = st.secrets["nasa_key"]
@@ -15,10 +18,10 @@ class PlotNewPoint:
         self.x_PCA = joblib.load("training_x_pca.joblib")
         
     def plot_new_point(self, asteroid_name):
-        collect_asteroid_data = CollectAsteroidData(today, next_days, API_KEY)
+        collect_asteroid_data = CollectAsteroidData(today=today, next_days=next_days, API_KEY=API_KEY)
 
         cluster = collect_asteroid_data.get_asteroid_cluster_group(asteroid_name).get("Cluster")
-        point = collect_asteroid_data.get_asteroid_cluster_group.get("Point")
+        point = collect_asteroid_data.get_asteroid_cluster_group(asteroid_name).get("point")
 
         plt.scatter(self.x_PCA[:, 0], self.x_PCA[:, 1], c=self.kmeans.labels_, cmap="viridis", alpha=0.5, label="Training Data")
 

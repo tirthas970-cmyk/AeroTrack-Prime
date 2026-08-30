@@ -147,7 +147,9 @@ class CollectAsteroidData:
 
         # Scale the data using your saved joblib scaler
         scaler = joblib.load("scalerv2.joblib")
-        scaled_new = scaler.transform(asteroid_csv_ready.values)
+        asteroid_csv_ready.columns = scaler.feature_names_in_
+
+        scaled_new = scaler.transform(asteroid_csv_ready)
 
         # Transform your dimensions 
         reducer = joblib.load("umap_reducerv2.joblib")
