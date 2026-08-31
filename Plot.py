@@ -23,11 +23,13 @@ class PlotNewPoint:
         cluster = collect_asteroid_data.get_asteroid_cluster_group(asteroid_name).get("Cluster")
         point = collect_asteroid_data.get_asteroid_cluster_group(asteroid_name).get("point")
 
-        plt.scatter(self.x_PCA[:, 0], self.x_PCA[:, 1], c=self.kmeans.labels_, cmap="viridis", alpha=0.5, label="Training Data")
+        fig, ax = plt.subplots(figsize=(8, 6))
+        
+        ax.scatter(self.x_PCA[:, 0], self.x_PCA[:, 1], c=self.kmeans.labels_, cmap="viridis", alpha=0.5, label="Training Data")
 
         centers = self.kmeans.cluster_centers_
 
-        plt.scatter(
+        ax.scatter(
             centers[:, 0], 
             centers[:, 1], 
             color='black',       
@@ -37,7 +39,17 @@ class PlotNewPoint:
             label='Centroids'    
         )
 
-        plt.scatter(
+        for i, (cx, cy) in enumerate(centers):
+            ax.text(
+                cx + 0.1, #shifts away from center
+                cy + 0.1, #shifts away from center 
+                f"Cluster {i}",
+                fontsize = 12,
+                fontweight="bold",
+                color="red"
+            )
+
+        ax.scatter(
             point[0, 0],
             point[0, 1],
             c=[cluster],
@@ -49,8 +61,8 @@ class PlotNewPoint:
             label=f"New Point (Cluster {cluster})",
         )
 
-        plt.legend()
-        plt.show()
+        ax.legend()
+        return fig 
 
 
 

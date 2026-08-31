@@ -152,7 +152,7 @@ class CollectAsteroidData:
         scaled_new = scaler.transform(asteroid_csv_ready)
 
         # Transform your dimensions 
-        reducer = joblib.load("umap_reducerv2.joblib")
+        reducer = joblib.load("pca_reducerv2.joblib")
         pca_new = reducer.transform(scaled_new)
 
         # Load your clustering model
@@ -165,6 +165,20 @@ class CollectAsteroidData:
         # Guard: Enforce strict float64 and contiguous C-memory alignment
         pca_new_stable = np.asarray(pca_new, dtype=np.float64, order='C')
         new_clusters = kmeans.predict(pca_new_stable)
+
+        X_pca = joblib.load("training_x_pca.joblib")
+        print("NEW RAW:")
+        print(asteroid_csv_ready)
+
+        print("\nNEW SCALED:")
+        print(scaled_new)
+
+        print("\nNEW PCA:")
+        print(pca_new)
+
+        print("\nPCA TRAINING RANGE:")
+        print("PC1:", X_pca[:, 0].min(), "to", X_pca[:, 0].max())
+        print("PC2:", X_pca[:, 1].min(), "to", X_pca[:, 1].max())
 
         #Guard against shape variations (handles scalar vs array inputs safely)
         cluster_num = int(np.atleast_1d(new_clusters)[0])

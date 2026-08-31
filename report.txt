@@ -1,21 +1,21 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: August, 30, 13:38
+Generated: August, 31, 17:25
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 2485823
-Asteroid Name: 485823 2012 DF61
-Size: 448.7867008808 meters
-Velocity: 24621.9675921279 mph
-Closest Approach: 2026-Aug-30 17:12
+Asteroid ID: 3134262
+Asteroid Name: 2002 RT
+Size: 383.7425691085 meters
+Velocity: 79735.1657041548 mph
+Closest Approach: 2026-Aug-31 23:41
 Is Hazardous: ❌
 
 TRAJECTORY ANALYSIS
 -----------------------
 Path Intersects Earth: AsteroidStatus.LOST
-Max Potential Energy: 2055.68 mt
+Max Potential Energy: 13477.54 mt
 
 AI Composition Analysis 
 --------------------------

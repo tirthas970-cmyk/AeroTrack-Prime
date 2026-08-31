@@ -5,7 +5,12 @@ from TrajectoryEngine import MockAsteroidEngine
 from Markdown import Markdown
 import streamlit.components.v1 as components
 st.set_page_config(layout="wide")
-
+import io
+import base64
+import matplotlib
+matplotlib.use('Agg')  
+import matplotlib.pyplot as plt
+from Plot import PlotNewPoint
 
 # Setup Data
 API_KEY = st.secrets["nasa_key"]
@@ -164,6 +169,14 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
                 color: #94A3B8;
                 font-size: 16px;
             }
+            /* FIXES THE LEAKING PLOT IMAGE */
+            .asteroid-plot {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-top: 15px;
+            border-radius: 4px;
+            }
             </style>
             """,
             unsafe_allow_html=True
@@ -172,6 +185,15 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
         if st.session_state.show_ml_info:
             cluster = collect_asteroid_data.get_asteroid_cluster_group(st.session_state.selected_name).get("Cluster")
             cluster_info = collect_asteroid_data.get_cluster_info()
+
+            plot = PlotNewPoint()
+            fig = plot.plot_new_point(st.session_state.selected_name)
+
+            buf = io.BytesIO()
+            plt.savefig(buf, format='png', bbox_inches='tight', dpi=150)
+            plt.close(fig)
+            buf.seek(0)
+            plot_base64 = base64.b64encode(buf.read()).decode('utf-8')
             st.html(
         f"""
         <div class="custom-ml-profile">
@@ -183,6 +205,8 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
                 <li>{cluster_info[cluster]["Characteristic2"]}</li>
                 <li>{cluster_info[cluster]["Characteristic3"]}</li>
             </ul>
+            <img class="asteroid-plot" src="data:image/png;base64,{plot_base64}" />
+
 
         </div>
         """
