@@ -1,21 +1,21 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: September, 1, 12:12
+Generated: September, 1, 14:02
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 3689273
-Asteroid Name: 2014 SU1
-Size: 60.5396601689 meters
-Velocity: 38215.9592670775 mph
-Closest Approach: 2026-Sep-02 07:17
+Asteroid ID: 3672731
+Asteroid Name: 2014 KO62
+Size: 34.201092472 meters
+Velocity: 8849.19726064 mph
+Closest Approach: 2026-Sep-01 08:22
 Is Hazardous: ❌
 
 TRAJECTORY ANALYSIS
 -----------------------
 Path Intersects Earth: AsteroidStatus.LOST
-Max Potential Energy: 12.16 mt
+Max Potential Energy: 0.12 mt
 
 AI Composition Analysis 
 --------------------------

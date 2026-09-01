@@ -9,7 +9,7 @@ import joblib
 #import umap
 import numpy as np  # Ensures np is defined
 from scipy.spatial.distance import cdist
-
+from scipy.spatial import KDTree
 #to make it run on python 
 #umap.umap_._has_numba = False
 
@@ -168,44 +168,54 @@ class CollectAsteroidData:
 
         #Guard against shape variations (handles scalar vs array inputs safely)
         cluster_num = int(np.atleast_1d(new_clusters)[0])
+
+        scaled_data = joblib.load("scaled_data_v2.joblib")
+        tree = KDTree(scaled_data)
+        distance, indices = tree.query(scaled_new, k=5)
+        asteroid_names = joblib.load("asteroid_namesv2.joblib")
+        top_five_name = asteroid_names.iloc[indices[0]]['name'].tolist()
+
         return {
             "Cluster": cluster_num,
-            "point": pca_new_stable
+            "point": pca_new_stable,
+            "top_five": top_five_name
         }
-
 
     def get_cluster_info(self):
       #freqeuncy numbers are derived from the notebook
+
         cluster_info_map = [
-    {
-        0: "Intermediate Near-Earth Cruisers", 
-        "Frequency": 42.809735, 
-        "Characteristic1": "Average scale: Represent the mid-sized baseline for object size and brightness", 
-        "Characteristic2": "Standard velocity: Travel at a moderate, baseline cruising speed", 
-        "Characteristic3": "Middle ground: Pass Earth at an intermediate distance compared to other groups"
-    },
-    {
-        1: "High Velocity, Near-Earth Asteroids", 
-        "Frequency": 31.747788, 
-        "Characteristic1": "Blazing speed: Move significantly faster than all other tracked objects", 
-        "Characteristic2": "Compact frame: Characterized by the smallest dimensions and faintest visibility", 
-        "Characteristic3": "Distanced transit: Maintain a wide, standard clearance gap from Earth"
-    },
-    {
-        2: "Main-Belt Giants", 
-        "Frequency": 5.309735, 
-        "Characteristic1": "Enormous bulk: Possess massive physical dimensions and highly prominent brightness", 
-        "Characteristic2": "Lumbering pace: Travel at the slowest, most sluggish speed in the dataset", 
-        "Characteristic3": "Deep space: Record the furthest orbital clearance away from Earth"
-    },
-    {
-        3: "Close-Approach Neighborhood Threats", 
-        "Frequency": 20.132743, 
-        "Characteristic1": "Tight proximity: Fly by uniquely closer to Earth than any other cluster", 
-        "Characteristic2": "Sub-compact size: Form small-to-medium physical structures with faint profiles", 
-        "Characteristic3": "Brisk transit: Maintain a steady, swift speed through our local neighborhood"
-    }
+        {
+            0: "High-Velocity Deep-Space Giants",
+            "Frequency": 17.93,
+            "Characteristic1": "Massive bulk: Possess the largest physical diameter and highest visual brightness with the lowest absolute magnitude.",
+            "Characteristic2": "Blazing speed: Travel at the fastest relative velocity in the entire dataset.",
+            "Characteristic3": "Deep space: Pass by Earth at a massive distance, leaving a wide clearance gap."
+        },
+        {
+            1: "Lumbering Small-Scale Cruisers",
+            "Frequency": 38.29,
+            "Characteristic1": "Compact structure: Feature small physical sizes with quite faint visual profiles.",
+            "Characteristic2": "Sluggish pace: Move at the absolute slowest relative velocity among all tracked groups.",
+            "Characteristic3": "Standard clearance: Maintain an intermediate, safe transit distance away from Earth."
+        },
+        {
+            2: "Close-Approach Miniature Hazards",
+            "Frequency": 14.31,
+            "Characteristic1": "Extreme proximity: Record the closest miss distance, tracking significantly closer to Earth than any other cluster.",
+            "Characteristic2": "Sub-compact frame: Represent the absolute smallest and visually faintest objects in the dataset.",
+            "Characteristic3": "Brisk transit: Cruise at a moderate-to-high velocity through local space."
+        },
+        {
+            3: "Mid-Sized Outerspace Transits",
+            "Frequency": 29.48,
+            "Characteristic1": "Intermediate scale: Form a solid mid-to-large size tier with moderate visual brightness.",
+            "Characteristic2": "Steady pace: Maintain a stable, baseline cruising speed.",
+            "Characteristic3": "Distant corridor: Transit along a far-reaching outer orbital path away from Earth."
+        }
     ]
+
+
         return cluster_info_map
 
     def maximun_potential_threat(self):

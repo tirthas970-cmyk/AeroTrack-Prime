@@ -18,5 +18,4 @@ next_days = today + timedelta(days=3)
 
 collect_asteroid_data = CollectAsteroidData(API_KEY, today, next_days)
 
-plotter = PlotNewPoint()
-plot = plotter.plot_new_point("485823 2012 DF61")
+collect_asteroid_data.get_asteroid_cluster_group("2014 SU1")

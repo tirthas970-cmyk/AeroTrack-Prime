@@ -185,6 +185,7 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
         if st.session_state.show_ml_info:
             cluster = collect_asteroid_data.get_asteroid_cluster_group(st.session_state.selected_name).get("Cluster")
             cluster_info = collect_asteroid_data.get_cluster_info()
+            top_five = collect_asteroid_data.get_asteroid_cluster_group(st.session_state.selected_name).get("top_five")
 
             plot = PlotNewPoint()
             fig = plot.plot_new_point(st.session_state.selected_name)
@@ -205,6 +206,17 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
                 <li>{cluster_info[cluster]["Characteristic2"]}</li>
                 <li>{cluster_info[cluster]["Characteristic3"]}</li>
             </ul>
+            
+            <p><strong>Cluster Frequency: {cluster_info[cluster]["Frequency"]}%</strong></p>
+
+            <p><strong>Top 5 Most Similar Historical NEOs</strong></p>
+              <ol>
+                <li>{top_five[0].replace("(", "").replace(")", "")}</li>
+                <li>{top_five[1].replace("(", "").replace(")", "")}</li>
+                <li>{top_five[2].replace("(", "").replace(")", "")}</li>
+                <li>{top_five[3].replace("(", "").replace(")", "")}</li>
+                <li>{top_five[4].replace("(", "").replace(")", "")}</li>
+                </ol>
             <img class="asteroid-plot" src="data:image/png;base64,{plot_base64}" />
 
 
