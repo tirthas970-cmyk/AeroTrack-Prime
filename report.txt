@@ -1,21 +1,21 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: August, 31, 17:25
+Generated: September, 1, 12:12
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 3134262
-Asteroid Name: 2002 RT
-Size: 383.7425691085 meters
-Velocity: 79735.1657041548 mph
-Closest Approach: 2026-Aug-31 23:41
+Asteroid ID: 3689273
+Asteroid Name: 2014 SU1
+Size: 60.5396601689 meters
+Velocity: 38215.9592670775 mph
+Closest Approach: 2026-Sep-02 07:17
 Is Hazardous: ❌
 
 TRAJECTORY ANALYSIS
 -----------------------
 Path Intersects Earth: AsteroidStatus.LOST
-Max Potential Energy: 13477.54 mt
+Max Potential Energy: 12.16 mt
 
 AI Composition Analysis 
 --------------------------

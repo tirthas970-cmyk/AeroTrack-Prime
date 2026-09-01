@@ -6,6 +6,7 @@ import matplotlib
 
 matplotlib.use("TkAgg")  
 import matplotlib.pyplot as plt
+import seaborn as sns
 import joblib
 
 API_KEY = st.secrets["nasa_key"]
@@ -14,8 +15,8 @@ next_days = today + timedelta(days=3)
 
 class PlotNewPoint:
     def __init__(self):
-        self.kmeans = joblib.load("kmeans_modelv2.joblib")
-        self.x_PCA = joblib.load("training_x_pca.joblib")
+        self.kmeans = joblib.load("kmeans_modelv3.joblib")
+        self.X_pca = joblib.load("training_x_pcav2.joblib")
         
     def plot_new_point(self, asteroid_name):
         collect_asteroid_data = CollectAsteroidData(today=today, next_days=next_days, API_KEY=API_KEY)
@@ -24,8 +25,8 @@ class PlotNewPoint:
         point = collect_asteroid_data.get_asteroid_cluster_group(asteroid_name).get("point")
 
         fig, ax = plt.subplots(figsize=(8, 6))
-        
-        ax.scatter(self.x_PCA[:, 0], self.x_PCA[:, 1], c=self.kmeans.labels_, cmap="viridis", alpha=0.5, label="Training Data")
+
+        sns.scatterplot(x=self.X_pca[:, 0], y=self.X_pca[:, 1], hue=self.kmeans.labels_, palette="viridis", alpha=0.5, ax=ax)
 
         centers = self.kmeans.cluster_centers_
 
@@ -38,16 +39,6 @@ class PlotNewPoint:
             linewidths=4,        
             label='Centroids'    
         )
-
-        for i, (cx, cy) in enumerate(centers):
-            ax.text(
-                cx + 0.1, #shifts away from center
-                cy + 0.1, #shifts away from center 
-                f"Cluster {i}",
-                fontsize = 12,
-                fontweight="bold",
-                color="red"
-            )
 
         ax.scatter(
             point[0, 0],

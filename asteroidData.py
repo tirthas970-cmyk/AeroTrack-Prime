@@ -139,24 +139,24 @@ class CollectAsteroidData:
             asteroid_index = 0
 
         asteroid_csv_ready = pd.DataFrame({
-            "Absolute Magnitude (H)": [self.absolute_mag_list[asteroid_index]],
-            "Max Diameter (m)": [math.log10(self.size_list[asteroid_index])],
-            "Relative Velocity (miles/h)": [self.speed_list[asteroid_index]],
-            "Miss Distance (miles)": [math.log10(self.miss_distance[asteroid_index])],
+            "absolute_magnitude": [self.absolute_mag_list[asteroid_index]],
+            "estimated_diameter_max": [math.log10(self.size_list[asteroid_index])],
+            "relative_velocity": [self.speed_list[asteroid_index]],
+            "miss_distance": [math.log10(self.miss_distance[asteroid_index])],
         })
 
         # Scale the data using your saved joblib scaler
-        scaler = joblib.load("scalerv2.joblib")
+        scaler = joblib.load("scalerv3.joblib")
         asteroid_csv_ready.columns = scaler.feature_names_in_
 
         scaled_new = scaler.transform(asteroid_csv_ready)
 
         # Transform your dimensions 
-        reducer = joblib.load("pca_reducerv2.joblib")
+        reducer = joblib.load("pca_reducerv3.joblib")
         pca_new = reducer.transform(scaled_new)
 
         # Load your clustering model
-        kmeans = joblib.load("kmeans_modelv2.joblib")
+        kmeans = joblib.load("kmeans_modelv3.joblib")
 
         #puts into flaot64
         if hasattr(kmeans, 'cluster_centers_'):
@@ -165,20 +165,6 @@ class CollectAsteroidData:
         # Guard: Enforce strict float64 and contiguous C-memory alignment
         pca_new_stable = np.asarray(pca_new, dtype=np.float64, order='C')
         new_clusters = kmeans.predict(pca_new_stable)
-
-        X_pca = joblib.load("training_x_pca.joblib")
-        print("NEW RAW:")
-        print(asteroid_csv_ready)
-
-        print("\nNEW SCALED:")
-        print(scaled_new)
-
-        print("\nNEW PCA:")
-        print(pca_new)
-
-        print("\nPCA TRAINING RANGE:")
-        print("PC1:", X_pca[:, 0].min(), "to", X_pca[:, 0].max())
-        print("PC2:", X_pca[:, 1].min(), "to", X_pca[:, 1].max())
 
         #Guard against shape variations (handles scalar vs array inputs safely)
         cluster_num = int(np.atleast_1d(new_clusters)[0])
