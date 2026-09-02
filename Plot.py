@@ -3,8 +3,7 @@ from AsteroidData import CollectAsteroidData
 import streamlit as st
 from datetime import timedelta, date
 import matplotlib
-
-matplotlib.use("TkAgg")  
+matplotlib.use("Agg")  
 import matplotlib.pyplot as plt
 import seaborn as sns
 import joblib

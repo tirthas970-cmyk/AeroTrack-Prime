@@ -236,7 +236,7 @@ class CollectAsteroidData:
 
         meters_per_sec = self.speed_list[highest_index] * .44704
 
-        potetnial_energy = MockAsteroidEngine(radius=self.size_list[highest_index]/2, speed=meters_per_sec)
+        potetnial_energy = MockAsteroidEngine(radius=self.size_list[highest_index]/2, speed=meters_per_sec, initial_distance=70000000)
 
         energy_megatons = potetnial_energy.calculate_potential_energy()
 
@@ -254,6 +254,8 @@ class CollectAsteroidData:
 
         #prepare info
         self.get_data()
+        cluster = self.get_asteroid_cluster_group(asteroid_name).get("Cluster")
+        map = self.get_cluster_info()
 
         try:
             asteroid_index = self.name_list.index(asteroid_name)
@@ -271,7 +273,7 @@ class CollectAsteroidData:
         angle = round(math.degrees(math.atan(self.miss_distance[asteroid_index]/self.speed_list[asteroid_index])), 2)
 
 
-        simulate_asteroid = MockAsteroidEngine(radius=self.size_list[asteroid_index]/2, speed=self.speed_list[asteroid_index] * 0.44704, angle=angle)
+        simulate_asteroid = MockAsteroidEngine(radius=self.size_list[asteroid_index]/2, speed=self.speed_list[asteroid_index] * 0.44704, angle=angle, initial_distance=700000) #intial_distance is arbitary value
     
 
         with open("report.txt", "w", encoding="utf-8") as file:
@@ -295,8 +297,10 @@ TRAJECTORY ANALYSIS
 Path Intersects Earth: {simulate_asteroid.calculate_path()}
 Max Potential Energy: {simulate_asteroid.calculate_potential_energy()} mt
 
-AI Composition Analysis 
+AI Group Analysis:
 --------------------------
+Cluster Group: {cluster} - {map[cluster][cluster]}
+
 
 
 

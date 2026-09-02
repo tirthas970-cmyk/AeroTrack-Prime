@@ -11,6 +11,7 @@ import matplotlib
 matplotlib.use('Agg')  
 import matplotlib.pyplot as plt
 from Plot import PlotNewPoint
+from TrajectoryEngine import AsteroidStatus
 
 # Setup Data
 API_KEY = st.secrets["nasa_key"]
@@ -82,34 +83,35 @@ elif st.session_state.next:
 
             Asteroid_Angle = st.slider("Asteroid Angle (°)", min_value=-90, max_value=90, value=0, help="Degrees relative to Earth. 0° is a direct head-on shot.")
             Velocity = st.slider("Velocity (m/s)",  min_value=15000, max_value=30000, value=22000,    help="Speed in meters per second (m/s). 22,000 m/s is roughly 49,000 mph.")
-            Radius = st.slider("Radius (meters)",  min_value=15, max_value=1000, value=200, help="Asteroid radius in meters. A 1,000m radius is a 2-kilometer wide asteroid.")
+            Radius = st.slider("Radius (meters)",  min_value=5, max_value=50000, value=1000, help="Asteroid radius in meters. A 1,000m radius is a 2-kilometer wide asteroid.")
+            initial_starting_distance = st.slider("Initial Starting Distance (meters)",  min_value=6000000, max_value=130000000, value=70000000, help="Starting Asteroid Positio in kilometers. A 70000000 meters starting position is about 10x Earth's radius")
 
-            asteroid_simulation = MockAsteroidEngine(angle=Asteroid_Angle, speed=Velocity, radius=Radius)
+            asteroid_simulation = MockAsteroidEngine(angle=Asteroid_Angle, speed=Velocity, radius=Radius, initial_distance=initial_starting_distance)
 
             with sim_path:
                 # Wrap everything inside this column in the new neon blue panel
                 with st.container(key="sim_path_panel"):
                     if st.button("Simulate Path"):
                         asteroid_path = asteroid_simulation.calculate_path()
-                        if asteroid_path == "hit":
-                            st.error("ASTEROID HITS EARTH!")
-                            st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
-                            st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")
-                        elif asteroid_path == "miss":
-                            st.warning("MISS! Asteroid flew past Earth!")
-                            st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")
-                            st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
-                        elif asteroid_path == "Lost":
-                            st.success("Lost in space! Flew directly away")
-                            st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
-                        else:
-                            st.info("Simulation Timeout: Asteroid entered a stable orbit or calculations timed out")
-            
-            with other_panel:
-                with open("report.txt", "r") as file:
-                    file_contents = file.read()
-                
-                st.code(file_contents)
+                        match asteroid_path:
+                            case AsteroidStatus.HIT:
+                                st.error("ASTEROID HITS EARTH!")
+                                st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
+                                st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")
+                            case AsteroidStatus.BURNED:
+                                st.warning("HITS EARTH! BUT BURNS UP AS IT ENTERS EARTH'S ATMOSPHERE")
+                                st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
+                                st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")
+                            case AsteroidStatus.MISS:
+                                st.success("MISS! Asteroid flew past Earth!")
+                                st.markdown(f"Estimated closest approach distance: {asteroid_simulation.closest_aproach_dist} meters")
+                                st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
+                            case AsteroidStatus.LOST:
+                                st.success("Lost in space! Flew directly away")
+                                st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
+                            case _:
+                                st.info("Simulation Timeout: Asteroid entered a stable orbit or calculations timed out")
+         
    
     if st.button("Back to terminal"):
         st.session_state.next = False
@@ -181,6 +183,11 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
             """,
             unsafe_allow_html=True
         )
+          # FIXED TYPO: Changed st.session_state.seleced_name to st.session_state.selected_name
+        if st.button("Close Panel ✖️", key="close_ml_panel_btn"):
+                st.session_state.show_ml_info = False
+                st.session_state.selected_name = None  
+                st.rerun()
 
         if st.session_state.show_ml_info:
             cluster = collect_asteroid_data.get_asteroid_cluster_group(st.session_state.selected_name).get("Cluster")
@@ -223,12 +230,6 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
         </div>
         """
     )
-            
-            # FIXED TYPO: Changed st.session_state.seleced_name to st.session_state.selected_name
-            if st.button("Close Panel ✖️", key="close_ml_panel_btn"):
-                st.session_state.show_ml_info = False
-                st.session_state.selected_name = None  
-                st.rerun()
 
         # The table sits normally under the container profile view
         st.table(asteroid_data)

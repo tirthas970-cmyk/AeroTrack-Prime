@@ -7,13 +7,15 @@ class AsteroidStatus(Enum):
     MISS = "MISS"
     LOST = "LOST"
     STABLE = "STABLE"
+    BURNED = "BURNED"
 
 
 class MockAsteroidEngine:
-    def __init__(self, radius,speed, angle=0):
+    def __init__(self, radius,speed, initial_distance, angle=0,):
         self.radius = radius
         self.angle = angle
         self.speed = speed
+        self.initial_distance = initial_distance
 
         self.closest_aproach_dist = None
 
@@ -55,7 +57,7 @@ class MockAsteroidEngine:
         vy = self.speed * math.sin(math.radians(self.angle))
 
         #picked these numbers so the asteroid is around 10 Earth Radii away
-        asteroid_x = -70000000 #meters 
+        asteroid_x = -self.initial_distance #meters
         asteroid_y = 0 #meters
         
         dt = 10 #updates every 10 second
@@ -71,8 +73,12 @@ class MockAsteroidEngine:
             steps += 1
             r = math.sqrt(asteroid_x**2 + asteroid_y**2)
 
-            if r < min_approach_dist:
-                min_approach_dist = r
+            if r > self.EARTH_RADIUS * 5:
+                dt = 30.0 
+            elif r > self.EARTH_RADIUS * 1.5:
+                dt = 5.0   
+            else:
+                dt = 0.1   
 
             accerlation = (self.GRAVITY * self.EARTH_MASS) / (r**2)
             accerlation_x = -accerlation * (asteroid_x/r)
@@ -83,15 +89,22 @@ class MockAsteroidEngine:
             asteroid_x += vx * dt
             asteroid_y += vy * dt
 
+            r = math.sqrt(asteroid_x**2 + asteroid_y**2)
+            if r < min_approach_dist:
+                min_approach_dist = r
+
             #vector dot product 
             # < 0 -> asteroid moves towards Earth
             # =0: Perpendicular to Earth
             # > 0 --> moving away from Earth
             moving_away = (asteroid_x * vx + asteroid_y * vy) > 0
 
-            if r <= self.EARTH_RADIUS:
+            if r <= self.EARTH_RADIUS + self.radius:
                 self.closest_aproach_dist = round(min_approach_dist, 2)
-                return AsteroidStatus.HIT
+                if self.radius < 25:
+                    return AsteroidStatus.BURNED
+                else:
+                    return AsteroidStatus.HIT
             elif moving_away and r > self.EARTH_RADIUS * 3:
                 if min_approach_dist < initial_distance:
                     self.closest_aproach_dist = round(min_approach_dist, 2)
@@ -115,17 +128,16 @@ class MockAsteroidEngine:
 
         return round(energy_megatons, 2)
            
-#Test
-print("--- Asteroid 1 (Straight Line Shot) ---")
-asteroid1 = MockAsteroidEngine(radius=1000, angle=0, speed=25000)
-asteroid1.calculate_path()
-
-print("\n--- Asteroid 2 (Deflected Angle Miss) ---")
-asteroid2 = MockAsteroidEngine(radius=500, angle=15, speed=22000)
-asteroid2.calculate_path()
-
-print("\n--- Asteroid 3 (Fleeing Trajectory) ---")
-asteroid3 = MockAsteroidEngine(radius=800, angle=180, speed=15000)
-asteroid3.calculate_path()
 
 
+
+# Create an asteroid heading on a near-miss trajectory
+# Radius: 150m, Speed: 11,000 m/s, Starting Distance: 10 Earth Radii, Angle: 5 degrees
+engine = MockAsteroidEngine(radius=150, speed=11000, initial_distance=6.371e7, angle=5)
+
+status = engine.calculate_path()
+energy = engine.calculate_potential_energy()
+
+print(f"Simulation Result: {status.name}")
+print(f"Closest Approach:  {engine.closest_aproach_dist:,} meters")
+print(f"Impact Energy:     {energy:,} Megatons")
