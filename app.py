@@ -20,7 +20,6 @@ next_days = today + timedelta(days=3)
 
 collect_asteroid_data = CollectAsteroidData(API_KEY, today, next_days)
 
-#collect_asteroid_data.get_asteroid_cluster_group("136770 1996 PC1")
 # The aesthetic of the dashboard
 markdown = Markdown()
 markdown.markdown()
@@ -52,13 +51,14 @@ if not st.session_state.go:
 
 **What does this dashboard do?**
 - **NASA Feed Table**: A clean, updating table that shows the real names, speeds, and sizes of every asteroid passing Earth today, pulled live from Nasa's **actual** satellites
+- **Threat Assesment Panel**: A panel that shows asteroid with the **higest** potential energy!
+- **AI Profile Analysis**: Classifies selected asteroid into a specific group based on historical data using **Machine Learning**
+- **Automated Report Generator**: A text file that details **all information** of the selected asteroid
 - **Trajectory Modifier**: Slide bars where you can manually change an asteroid's variables, and see if your mock asteroid hits or misses Earth!
-- **Impact Zone Assessment**: Predicts landing and damage of the asteroid using Machine Leaning
-- **Automated Report Generator**: A text ffile that details all information of an asteroid
+
 """
     )
     
-    # Centered GO Button
     col1, col2, col3 = st.columns([2, 1, 2])
     with col2:
         if st.button("GO", use_container_width=True):
@@ -76,7 +76,7 @@ elif st.session_state.next:
     unsafe_allow_html=True
 )
     
-    slide_panel, sim_path, other_panel = st.columns([1, .7, 2])
+    slide_panel, sim_path, other_panel = st.columns([1.35, .7, 1.5])
 
     with slide_panel:
         with st.container(key="sim_container"):
@@ -84,11 +84,10 @@ elif st.session_state.next:
             Asteroid_Angle = st.slider("Asteroid Angle (°)", min_value=-90, max_value=90, value=0, help="Degrees relative to Earth. 0° is a direct head-on shot.")
             Velocity = st.slider("Velocity (m/s)",  min_value=15000, max_value=30000, value=22000,    help="Speed in meters per second (m/s). 22,000 m/s is roughly 49,000 mph.")
             Radius = st.slider("Radius (meters)",  min_value=5, max_value=50000, value=1000, help="Asteroid radius in meters. A 1,000m radius is a 2-kilometer wide asteroid.")
-            initial_starting_distance = st.slider("Initial Starting Distance (meters)",  min_value=6000000, max_value=130000000, value=70000000, help="Starting Asteroid Positio in kilometers. A 70000000 meters starting position is about 10x Earth's radius")
+            initial_starting_distance = st.slider("Initial Starting Distance (meters)",  min_value=6000000, max_value=75000000, value=35000000, help="Starting Asteroid Positio in kilometers. A 35000000 meters starting position is about 5x Earth's radius")
             asteroid_simulation = MockAsteroidEngine(angle=Asteroid_Angle, speed=Velocity, radius=Radius, initial_distance=initial_starting_distance)
 
             with sim_path:
-                # Wrap everything inside this column in the new neon blue panel
                 with st.container(key="sim_path_panel"):
                     if st.button("Simulate Path"):
                         asteroid_path = asteroid_simulation.calculate_path()
@@ -111,22 +110,18 @@ elif st.session_state.next:
                             case _:
                                 st.info("Simulation Timeout: Asteroid entered a stable orbit or calculations timed out")
 
-            with other_panel:
-                gif_bytes_io = asteroid_simulation.animate()
-
-                # Encode the bytes directly to Base64 string
-                fig_base64 = base64.b64encode(gif_bytes_io.read()).decode('utf-8')
-
-                # Render via HTML
-                st.html(
-                    f"""
-                    <div class="custom-ml-profile">
-                        <h3>Testing </h3>
-                        <img class="asteroid-plot" src="data:image/gif;base64,{fig_base64}" />
-                    </div>
-                    """
-                )
-
+                        with other_panel:
+                              with st.container(key="gif_panel"):
+                                    gif_bytes_io = asteroid_simulation.animate()
+                                    fig_base64 = base64.b64encode(gif_bytes_io.read()).decode('utf-8')
+                                    
+                                    # Render a clean, non-bloated clean HTML payload 
+                                    st.html(
+                                        f"""
+                                        <h3>GIF of Mock Asteroid</h3>
+                                        <img class="asteroid-plot" src="data:image/gif;base64,{fig_base64}" />
+                                        """
+                                    )
          
    
     if st.button("Back to terminal"):
@@ -151,10 +146,8 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
     st.write("") #empty space
 
     asteroid_data = collect_asteroid_data.get_st_table() 
-    # 1. CLEAN SIDE-BY-SIDE COLUMN LAYOUT
     main_col, side_col = st.columns([3, 2]) 
 
-    # Table Hover effects
     st.markdown("""
     <style>
     .stTable tbody tr { cursor: pointer; transition: background-color 0.2s ease; }
@@ -162,9 +155,7 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
     </style>
     """, unsafe_allow_html=True)
 
-    # 2. Render table inside main_col first
     with main_col:
-        # --- MOVED EXTRA CUSTOM STYLING INTO A CLEAN CSS BLOCK ---
         st.markdown(
             """
             <style>
@@ -199,7 +190,6 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
             """,
             unsafe_allow_html=True
         )
-          # FIXED TYPO: Changed st.session_state.seleced_name to st.session_state.selected_name
         if st.button("Close Panel ✖️", key="close_ml_panel_btn"):
                 st.session_state.show_ml_info = False
                 st.session_state.selected_name = None  
@@ -247,10 +237,8 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
         """
     )
 
-        # The table sits normally under the container profile view
         st.table(asteroid_data)
 
-    # 3. CRITICAL CSS FIX: Inject absolute suppression rules before rendering the buttons
     st.markdown(
         """
         <style>
@@ -270,7 +258,6 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
         unsafe_allow_html=True
     )
 
-    # Render buttons in a designated stealth container wrapper
     with st.container():
         st.markdown('<div class="hidden-btn-container">', unsafe_allow_html=True)
         for idx in range(len(asteroid_data)):
@@ -288,7 +275,6 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
                 st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # 4. Inject Javascript tracker targeting parent scope
     components.html(
         """
         <script>
@@ -323,8 +309,6 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
     )
 
 
-
-
     # Right side content
     with side_col:
         tab1, tab2 = st.tabs(["⚠️ Threat Assessment", "📊 Detailed Report"])
@@ -338,7 +322,6 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
                 panel_key = "clear_panel"
 
             with st.container(key=panel_key):
-                # High-impact Header with warning icon
                 
                 if maximum_threat:
                     st.markdown("### ⚠️ CRITICAL THREAT DETECTED")
@@ -359,7 +342,6 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
                         
                     st.write("") 
                     
-                    # Sub-metrics nested neatly within the right column container
                     m_col1, m_col2 = st.columns(2)
                     with m_col1:
                         st.metric(label="⚡ POTENTIAL ENERGY", value=f"{energy:,.2f} MT")

@@ -6,16 +6,9 @@ import datetime
 import json
 import math 
 import joblib 
-#import umap
-import numpy as np  # Ensures np is defined
+import numpy as np  
 from scipy.spatial.distance import cdist
 from scipy.spatial import KDTree
-#to make it run on python 
-#umap.umap_._has_numba = False
-
-### TO DO: TRY- EXCEPT
-
-
 
 class CollectAsteroidData:
     def __init__(self, API_KEY, today, next_days):
@@ -23,7 +16,6 @@ class CollectAsteroidData:
             "api_key": API_KEY,
             "start_date": today,
             "end_date": next_days
-
         }
         self.name_list = []
         self.speed_list = []
@@ -88,19 +80,7 @@ class CollectAsteroidData:
         else:
             print(f"NOT WORKING  {response.status_code}")
     
-    #seems to be useless -> DELETE METHOD
-    def jpl_data(self, asteroid_id):
-        jpl_url = f"https://ssd-api.jpl.nasa.gov/sbdb.api?spk={asteroid_id}&phys-par=1"
-
-        response = requests.get(jpl_url)
-
-        data = response.json()
-
-        # Print all available physical parameters
-        for param in data.get('phys_par', []):
-            print(f"{param['title']} ({param['name']}): {param['value']} {param.get('units', '')}")
-
-
+  
     def get_st_table(self):
         self.get_data()
 
@@ -114,21 +94,6 @@ class CollectAsteroidData:
 
         return asteroid_data
     
-    def get_csv(self):
-
-        self.get_data()
-
-        asterooid_csv_ready = pd.DataFrame(
-            {         
-                "Name": self.name_list,
-                "Size (meters)": self.size_list,
-                "Speed (mph)": self.speed_list,
-                "Miss Distance": self.miss_distance,
-                "Absolute Magnitude": self.absolute_mag_list
-            }
-        )
-
-        asterooid_csv_ready.to_csv('asteroid_clustering.csv', index=False)
 
     def get_asteroid_cluster_group(self, asteroid_name):
 

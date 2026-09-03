@@ -1,5 +1,4 @@
 import math
-
 from enum import Enum
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,7 +6,7 @@ from matplotlib.animation import FuncAnimation
 import io
 import os
 import tempfile
-
+from PIL import Image
 
 class AsteroidStatus(Enum):
     HIT = "HIT"
@@ -140,10 +139,11 @@ class MockAsteroidEngine:
         self.vy = self.speed * math.sin(math.radians(self.angle)) 
         self.asteroid_x = -self.initial_distance #meters 
         self.asteroid_y = 0 #meters 
-        dt = 200 
+        dt = 150
         self.min_approach_dist = float("inf") 
         self.initial_distancev2 = math.sqrt(self.asteroid_x**2 + self.asteroid_y**2) 
         
+        # Set up static plot structure
         fig, ax = plt.subplots(figsize=(6, 6)) 
         fig.patch.set_facecolor('black') 
         ax.set_facecolor('black') 
@@ -154,18 +154,17 @@ class MockAsteroidEngine:
         status_text_speed = ax.text(0.01, 0.75, ' ' * 50, transform=ax.transAxes, color='blue', fontsize=12, weight='bold') 
         x_history, y_history = [], [] 
         trail, = ax.plot([], [], "w-", alpha=0.3) 
+        
+        ax.set_xlim(-12, 12) 
+        ax.set_ylim(-12, 12) 
+        
         self.end_frame = None 
+        frames_list = []
 
-        def init(): 
-            ax.set_xlim(-12, 12) 
-            ax.set_xlim(-12, 12) 
-            ax.set_ylim(-12, 12) 
-            return asteroid, earth, trail, status_text, status_text_speed, 
-
-        def update(frame): 
-            # FIX: Do not raise StopIteration. Just keep returning the elements without updating position.
+        for frame in range(500):
+            # 1. Check if we have processed our 30 trailing frames after an event
             if self.end_frame is not None and frame >= self.end_frame: 
-                return asteroid, earth, trail, status_text, status_text_speed, 
+                break
                 
             if self.end_frame is None: 
                 r = math.sqrt(self.asteroid_x**2 + self.asteroid_y**2) 
@@ -176,13 +175,16 @@ class MockAsteroidEngine:
                 self.vy += accerlation_y * dt 
                 self.asteroid_x += self.vx * dt 
                 self.asteroid_y += self.vy * dt 
+                
                 r = math.sqrt(self.asteroid_x**2 + self.asteroid_y**2) 
                 if r < self.min_approach_dist: 
                     self.min_approach_dist = r 
+                    
                 plot_x = self.asteroid_x / self.EARTH_RADIUS 
                 plot_y = self.asteroid_y / self.EARTH_RADIUS 
                 x_history.append(plot_x) 
                 y_history.append(plot_y) 
+                
                 asteroid.set_data([plot_x], [plot_y]) 
                 trail.set_data(x_history, y_history) 
                 status_text_speed.set_text(f"Velocity: {round(math.sqrt(self.vx**2 + self.vy**2), 2)} (m/s)") 
@@ -205,25 +207,26 @@ class MockAsteroidEngine:
             else: 
                 plot_x = self.asteroid_x / self.EARTH_RADIUS 
                 plot_y = self.asteroid_y / self.EARTH_RADIUS 
-                
-            return asteroid, earth, trail, status_text, status_text_speed, 
 
-        self.ani = FuncAnimation(fig, update, frames=500, init_func=init, blit=False, interval=30, cache_frame_data=False) 
-        
-        # Safe multi-frame file handling
+            frame_buffer = io.BytesIO()
+            fig.savefig(frame_buffer, format='png', facecolor=fig.get_facecolor(), edgecolor='none', dpi=100)
+            frame_buffer.seek(0)
+            
+            frames_list.append(Image.open(frame_buffer))
+
+        plt.close(fig) # Completely free up Matplotlib plotting memory
+
         gif_buffer = io.BytesIO() 
-        with tempfile.NamedTemporaryFile(suffix=".gif", delete=False) as tmpfile:
-            tmp_path = tmpfile.name
-
-        try:
-            self.ani.save(tmp_path, writer="pillow", fps=30, metadata={"loop": 0})
-            with open(tmp_path, "rb") as f:
-                gif_buffer.write(f.read())
-        finally:
-            if os.path.exists(tmp_path):
-                os.remove(tmp_path)
-
-        plt.close(fig) 
+        if frames_list:
+            frames_list[0].save(
+                gif_buffer,
+                format='GIF',
+                save_all=True,
+                append_images=frames_list[1:],
+                duration=33, 
+                loop=0
+            )
+            
         gif_buffer.seek(0) 
         return gif_buffer
 

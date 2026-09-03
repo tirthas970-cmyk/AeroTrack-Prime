@@ -254,7 +254,43 @@ div.element-container:has(button[key="next_btn"]), .st-key-next_btn, .st-key-nex
     justify-content: center !important;   /* Extra insurance to explicitly center the button asset */
     width: 100% !important;
 }
-</style>
-""", unsafe_allow_html=True)
+# Add this code block at the very bottom of your style string inside your Markdown class
+[data-element-key="gif_panel"], .st-key-gif_panel, div[data-element-key="gif_panel"] {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    padding: 22px !important;
+    background: rgba(14, 18, 36, 0.95) !important;
+    border: 2px solid #00d2ff !important; /* Matches your cyber neon blue */
+    border-radius: 16px !important;
+    box-shadow: 0px 0px 20px rgba(0, 210, 255, 0.6), inset 0px 0px 15px rgba(0, 210, 255, 0.2) !important;
+    text-align: center !important;
+}
+
+[data-element-key="gif_panel"] > div {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+[data-element-key="gif_panel"] h3 {
+    font-size: 1.5rem !important;
+    color: #FFBE46 !important; /* Matches your gold headers */
+    text-shadow: 0px 0px 10px rgba(255, 190, 70, 0.5);
+    margin-top: 0px !important;
+    margin-bottom: 15px !important;
+}
+
+.asteroid-plot {
+    border-radius: 8px;
+    max-width: 100%;
+    height: auto;
+    box-shadow: 0px 0px 10px rgba(0, 210, 255, 0.3);
+}
+</style>"""
+, unsafe_allow_html=True)
         
         return markdown_stuff

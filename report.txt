@@ -1,21 +1,21 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: September, 2, 11:00
+Generated: September, 3, 12:17
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 3689273
-Asteroid Name: 2014 SU1
-Size: 60.5396601689 meters
-Velocity: 38215.9592670775 mph
-Closest Approach: 2026-Sep-02 07:17
+Asteroid ID: 3646736
+Asteroid Name: 2013 QF11
+Size: 71.4562101727 meters
+Velocity: 40075.2333820134 mph
+Closest Approach: 2026-Sep-03 06:35
 Is Hazardous: ❌
 
 TRAJECTORY ANALYSIS
 -----------------------
-Path Intersects Earth: AsteroidStatus.LOST
-Max Potential Energy: 12.16 mt
+Path Intersects Earth: AsteroidStatus.HIT
+Max Potential Energy: 21.98 mt
 
 AI Group Analysis:
 --------------------------
