@@ -190,12 +190,12 @@ text-shadow: 0 0 6px rgba(0, 210, 255, 0.6);"> 🚀 AeroTrack-Prime </div> """, 
             """,
             unsafe_allow_html=True
         )
-        if st.button("Close Panel ✖️", key="close_ml_panel_btn"):
+       
+        if st.session_state.show_ml_info:
+            if st.button("Close Panel ✖️", key="close_ml_panel_btn"):
                 st.session_state.show_ml_info = False
                 st.session_state.selected_name = None  
                 st.rerun()
-
-        if st.session_state.show_ml_info:
             cluster = collect_asteroid_data.get_asteroid_cluster_group(st.session_state.selected_name).get("Cluster")
             cluster_info = collect_asteroid_data.get_cluster_info()
             top_five = collect_asteroid_data.get_asteroid_cluster_group(st.session_state.selected_name).get("top_five")
