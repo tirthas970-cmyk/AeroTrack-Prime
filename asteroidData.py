@@ -110,28 +110,23 @@ class CollectAsteroidData:
             "miss_distance": [math.log10(self.miss_distance[asteroid_index])],
         })
 
-        # Scale the data using your saved joblib scaler
         scaler = joblib.load("scalerv3.joblib")
         asteroid_csv_ready.columns = scaler.feature_names_in_
 
         scaled_new = scaler.transform(asteroid_csv_ready)
 
-        # Transform your dimensions 
         reducer = joblib.load("pca_reducerv3.joblib")
         pca_new = reducer.transform(scaled_new)
 
-        # Load your clustering model
         kmeans = joblib.load("kmeans_modelv3.joblib")
 
         #puts into flaot64
         if hasattr(kmeans, 'cluster_centers_'):
            kmeans.cluster_centers_ = np.asarray(kmeans.cluster_centers_, dtype=np.float64, order='C')
 
-        # Guard: Enforce strict float64 and contiguous C-memory alignment
         pca_new_stable = np.asarray(pca_new, dtype=np.float64, order='C')
         new_clusters = kmeans.predict(pca_new_stable)
 
-        #Guard against shape variations (handles scalar vs array inputs safely)
         cluster_num = int(np.atleast_1d(new_clusters)[0])
 
         scaled_data = joblib.load("scaled_data_v2.joblib")

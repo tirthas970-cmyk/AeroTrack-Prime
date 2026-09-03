@@ -1,21 +1,21 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: September, 3, 12:17
+Generated: September, 3, 12:35
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 3646736
-Asteroid Name: 2013 QF11
-Size: 71.4562101727 meters
-Velocity: 40075.2333820134 mph
-Closest Approach: 2026-Sep-03 06:35
+Asteroid ID: 3836756
+Asteroid Name: 2018 XF2
+Size: 32.6617897446 meters
+Velocity: 48326.2123336091 mph
+Closest Approach: 2026-Sep-04 23:20
 Is Hazardous: ❌
 
 TRAJECTORY ANALYSIS
 -----------------------
-Path Intersects Earth: AsteroidStatus.HIT
-Max Potential Energy: 21.98 mt
+Path Intersects Earth: AsteroidStatus.BURNED
+Max Potential Energy: 3.05 mt
 
 AI Group Analysis:
 --------------------------
