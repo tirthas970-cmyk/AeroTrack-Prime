@@ -85,7 +85,6 @@ elif st.session_state.next:
             Velocity = st.slider("Velocity (m/s)",  min_value=15000, max_value=30000, value=22000,    help="Speed in meters per second (m/s). 22,000 m/s is roughly 49,000 mph.")
             Radius = st.slider("Radius (meters)",  min_value=5, max_value=50000, value=1000, help="Asteroid radius in meters. A 1,000m radius is a 2-kilometer wide asteroid.")
             initial_starting_distance = st.slider("Initial Starting Distance (meters)",  min_value=6000000, max_value=130000000, value=70000000, help="Starting Asteroid Positio in kilometers. A 70000000 meters starting position is about 10x Earth's radius")
-
             asteroid_simulation = MockAsteroidEngine(angle=Asteroid_Angle, speed=Velocity, radius=Radius, initial_distance=initial_starting_distance)
 
             with sim_path:
@@ -111,6 +110,23 @@ elif st.session_state.next:
                                 st.metric(label="⚡ POTENTIAL ENERGY", value=f"{asteroid_simulation.calculate_potential_energy():,.2f} MT")
                             case _:
                                 st.info("Simulation Timeout: Asteroid entered a stable orbit or calculations timed out")
+
+            with other_panel:
+                gif_bytes_io = asteroid_simulation.animate()
+
+                # Encode the bytes directly to Base64 string
+                fig_base64 = base64.b64encode(gif_bytes_io.read()).decode('utf-8')
+
+                # Render via HTML
+                st.html(
+                    f"""
+                    <div class="custom-ml-profile">
+                        <h3>Testing </h3>
+                        <img class="asteroid-plot" src="data:image/gif;base64,{fig_base64}" />
+                    </div>
+                    """
+                )
+
          
    
     if st.button("Back to terminal"):
