@@ -1,7 +1,8 @@
 <h1 align="center">AeroTrack-Prime</h1>
 <p align="center">Desktop Command Dashboard About Asteroids</p>
-<h3 align="center">@tirthas970-cmyk</p3>
-
+<div align="center">
+  <h6><a href="https://github.com">@tirthas970-cmyk</a></h6>
+</div>
 
 #### What does it do?
 * **NASA Feed Table**: A clean, updating table that shows real names, speeds, and sizes of every asteroid passing Earth today, pulled live from Nasa's actual satellites
