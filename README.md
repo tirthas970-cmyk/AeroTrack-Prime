@@ -57,6 +57,13 @@
 ## Final Comments:
 > Note that **Google Gemini** was used for GUI debugging and helping out with the physics. Other than that, I wrote almost all the code for this program. **ChatGPT** was also used for initial concept images of this dashboard.
 
+## Pictures:
+
+<img width="1902" height="720" alt="Screenshot 2026-09-12 130631" src="https://github.com/user-attachments/assets/6d3cd4c7-0355-4807-9290-df06f3ba550c" /><img width="1875" height="847" alt="Screenshot 2026-09-12 130735" src="https://github.com/user-attachments/assets/178edcb6-e0af-4bae-919c-97c42bd51eb5" />
+<img width="988" height="767" alt="image" src="https://github.com/user-attachments/assets/8419d46a-d8c9-488e-8799-12e520cf710c" />
+<img width="1851" height="697" alt="image" src="https://github.com/user-attachments/assets/6210b3f3-b2cd-43b9-afbd-85b972c2b662" />
+<img width="685" height="752" alt="image" src="https://github.com/user-attachments/assets/7c50d737-4dd4-41aa-abec-0b9f89689318" />
+
 
 
 
