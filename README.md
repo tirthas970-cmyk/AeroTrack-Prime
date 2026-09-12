@@ -1,7 +1,7 @@
-# AeroTrack-Prime
-Desktop Command Dashboard About Asteroids
+                                                                                          # AeroTrack-Prime
+                                                                                 Desktop Command Dashboard About Asteroids
 
-### What does it do?
+#### What does it do?
 * **NASA Feed Table**: A clean, updating table that shows real names, speeds, and sizes of every asteroid passing Earth today, pulled live from Nasa's actual satellites
 * **Threat Assessment Panel**: Shows asteroids with the highest potential energy
 * **AI Profile Analysis**: Classifies selected asteroid into a specific group based on historical data using Machine Learning
@@ -45,13 +45,14 @@ Desktop Command Dashboard About Asteroids
 * Month 2: Doing Unsupervised machine learning for AI Profile Analysis, polishing the GUI, creating a GIF of mock asteroids, publishing to Streamlit Cloud
 
 ## Future Roadmap:
->> Note: This project is considered complete in regards to functionality. However, soon, I will make my code more readable professional. Feel free to fork this repository and further develop it using these ideas:
+> Note: This project is considered complete in regards to functionality. However, soon, I will make my code more readable professional. Feel free to fork this repository and further develop it using these ideas:
 * Create a feature that shows historical asteroids
 * Update **Trajectory Modifier** to incorporate Earth's magnetic field on whether or not an asteroid will burn up when entering the atmosphere
 * Create a interactive 3D orbit viewer
 
 
->> Note that **Google Gemini** was used for GUI debugging and helping out with the physics. Other than that, I wrote almost all the code for this program. **ChatGPT** was also used for initial concept images of this dashboard.
+## Final Comments:
+> Note that **Google Gemini** was used for GUI debugging and helping out with the physics. Other than that, I wrote almost all the code for this program. **ChatGPT** was also used for initial concept images of this dashboard.
 
 
 
