@@ -12,7 +12,57 @@
 * **Trajectory Modifier**: Slide bars where you can manually change an asteroid's variables, and see if your mock asteroid hits or misses Earth!
 
 ## How to Run?
-* Click on this link: https://aerotrack-prime-4hx2awdqlc4qm8pawawcya.streamlit.app/ 
+* Click on this link: https://aerotrack-prime-4hx2awdqlc4qm8pawawcya.streamlit.app/
+   * This is the public version!
+
+## 🛠️ Installation & Local Setup
+
+If you want to run the dashboard locally on your machine instead of using the Streamlit Cloud link, follow these steps:
+
+### Prerequisites
+- **Python**: 3.13.2
+- **NASA API Key**: Get a free key instantly at [api.nasa.gov](https://nasa.gov)
+
+### Step-by-Step Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com
+   cd AeroTrack-Prime
+   ```
+
+2. **Create and activate a virtual environment (Recommended):**
+   ```bash
+   # Create environment
+   python -m venv venv
+   
+   # Activate on Windows:
+   .\venv\Scripts\activate
+   
+   # Activate on macOS/Linux:
+   source venv/bin/activate
+   ```
+
+3. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Configure your NASA API Secrets:**
+   * Create a folder named `.streamlit` in your project's root directory.
+   * Inside that folder, create a file named `secrets.toml`.
+   * Add your API key to the file exactly like this:
+     ```toml
+     nasa_key = "YOUR_ACTUAL_API_KEY_HERE"
+     ```
+   *(Note: The `.streamlit/secrets.toml` file is automatically ignored by git to keep your key secure!)*
+
+5. **Launch the application:**
+   ```bash
+   streamlit run app.py
+   ```
+
+
 
 ## Key Files Explanations:
 * The files that my program depends on are:
