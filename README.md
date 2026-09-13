@@ -15,7 +15,7 @@
 * Click on this link: https://aerotrack-prime-4hx2awdqlc4qm8pawawcya.streamlit.app/
    * This is the public version!
 
-## 🛠️ Installation & Local Setup
+## Installation & Local Setup
 
 If you want to run the dashboard locally on your machine instead of using the Streamlit Cloud link, follow these steps:
 
