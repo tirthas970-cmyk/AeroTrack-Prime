@@ -130,6 +130,21 @@ graph TD
     J -- No --> A
 ```
 
+## Calculation of Highest Potential Energy in MT
+The **Threat Assessment Panel** uses physics equations to find out which asteroids had the highest potential energy 
+* **$(d^3 \times v^2)$**: Used to figure out which of the asteroids in the list has the highest kinetic energy.
+
+To find the energy in MT, the asteroid with the highest kinetic energy is processed through these two equations:
+
+$$
+m = \frac{4}{3} \pi \left(\frac{d}{2}\right)^3 = \frac{\pi}{6} d^3
+$$
+
+$$
+\text{Energy in Megatons} = \frac{0.5 \cdot m \cdot v^2}{4.184 \times 10^{15}}
+$$
+
+
 
 
 ## ML Deepdive
