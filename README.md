@@ -170,7 +170,9 @@ $$
 * Dataset was scaled using Standard Scaler
 * Implemented PCA to reduce the dimensions (feautres) of dataset
 
-Image of Cluster:
+Image of Clusters:
+<br><br>
+
 <img width="670" height="528" alt="image" src="https://github.com/user-attachments/assets/1ebb965f-08fa-4a03-8237-1c201846b432" />
   
 ## Technologies Used:
