@@ -1,7 +1,7 @@
 <h1 align="center">AeroTrack-Prime</h1>
 <p align="center">Desktop Command Dashboard About Asteroids</p>
 <div align="center">
-  <h6><a href="https://github.com">@tirthas970-cmyk</a></h6>
+  <a href="https://github.com/tirthas970-cmyk">tirthas970-cmyk</a>
 </div>
 
 #### What does it do?
@@ -106,6 +106,10 @@ If you want to run the dashboard locally on your machine instead of using the St
 
 ## Final Comments:
 > Note that **Google Gemini** was used for GUI debugging and helping out with the physics. Other than that, I wrote almost all the code for this program. **ChatGPT** was also used for initial concept images of this dashboard.
+
+## 📄 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 
 ## Pictures:
 
