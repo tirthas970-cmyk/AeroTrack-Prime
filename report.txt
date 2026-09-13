@@ -1,25 +1,25 @@
 ===============================================================                   
 ASTEROID REPORT:
-Generated: September, 3, 12:35
+Generated: September, 12, 13:46
 ================================================================    
 
 OBJECT INFORMATION
 --------------------
-Asteroid ID: 3836756
-Asteroid Name: 2018 XF2
-Size: 32.6617897446 meters
-Velocity: 48326.2123336091 mph
-Closest Approach: 2026-Sep-04 23:20
+Asteroid ID: 3760680
+Asteroid Name: 2016 TZ19
+Size: 139.3285055244 meters
+Velocity: 30942.6653914918 mph
+Closest Approach: 2026-Sep-13 10:09
 Is Hazardous: ❌
 
 TRAJECTORY ANALYSIS
 -----------------------
-Path Intersects Earth: AsteroidStatus.BURNED
-Max Potential Energy: 3.05 mt
+Path Intersects Earth: AsteroidStatus.HIT
+Max Potential Energy: 97.15 mt
 
 AI Group Analysis:
 --------------------------
-Cluster Group: 1 - Lumbering Small-Scale Cruisers
+Cluster Group: 3 - Mid-Sized Outerspace Transits
 
 
 
