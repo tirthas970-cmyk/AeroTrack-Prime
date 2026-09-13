@@ -76,6 +76,81 @@ If you want to run the dashboard locally on your machine instead of using the St
 * **.joblib** files: These files were saved as .joblib files from the notebook; used in AsteroidData.py to find the cluster of a new asteroid
 * **requirements.txt**: The requirements to create this app in Streamlit
 
+##  Physics Engine & Simulation Logic
+
+For the **Trajectory Modifier**, I did a  **2-Body Gravitational Simulation**, using **Euler-Cromer Integration** loop
+
+### 1. Mathematical Model
+
+#### Mass Estimation
+The engine assumes a spherical asteroid to calculate its volume and derived mass:
+$$V = \frac{4}{3}\pi r^3 \quad \implies \quad m = V \cdot \rho$$
+
+#### Universal Gravitation
+At each time step $\Delta t$, the engine calculates the acceleration vector $\vec{a}$ that is exerted by Earth's gravitational well:
+$$a = \frac{G \cdot M_\oplus}{r^2} \quad \implies \quad a_x = -a \cdot \left(\frac{x}{r}\right), \quad a_y = -a \cdot \left(\frac{y}{r}\right)$$
+
+
+### 2. Advanced Optimization Features
+
+####  Time-Stepping ($\Delta t$)
+* **Deep Space:** $r > 5 R_\oplus \implies \Delta t = 30.0\text{ seconds}$
+* **Approach Buffer:** $1.5 R_\oplus < r \le 5 R_\oplus \implies \Delta t = 5.0\text{ seconds}$
+* **Terminal Proximity:** $r \le 1.5 R_\oplus \implies \Delta t = 0.1\text{ seconds}$
+
+####  Vector Dot Product State Termination
+I check if the asteroid is escaping or crashing using a **Vector Dot Product** ($\vec{r} \cdot \vec{v}$):
+$$\text{Directional State} = (x \cdot v_x) + (y \cdot v_y)$$
+* $\vec{r} \cdot \vec{v} < 0 \implies$ The asteroid is gaining speed and falling **towards** Earth.
+* $\vec{r} \cdot \vec{v} > 0 \implies$ The asteroid is moving **away** from Earth.
+
+---
+
+### 3. Simulation Outcomes (`AsteroidStatus`)
+
+The loop runs up to a maximum of `5000` steps and terminates cleanly into one of five states:
+
+```mermaid
+graph TD
+    classDef state fill:#1e1e24,stroke:#38bdf8,stroke-width:2px,color:#fff;
+    
+    A[Start Simulation Loop] --> B{r <= Earth Radius + Asteroid Radius?}
+    
+    B -- Yes --> C{Asteroid Radius < 25m?}
+    C -- Yes --> D[BURNED <br/> Disintegrates in Atmosphere]:::state
+    C -- No --> E[HIT <br/> Surface Impact Event]:::state
+    
+    B -- No --> F{Moving Away & r > 3 Earth Radii?}
+    F -- Yes --> G{Closest Approach < Initial Distance?}
+    G -- Yes --> H[MISS <br/> Safely Deflected by Gravity]:::state
+    G -- No --> I[LOST <br/> Escaped Gravitational Well]:::state
+    
+    F -- No --> J{Steps >= 5000?}
+    J -- Yes --> K[STABLE <br/> Trapped in a Stable Orbit]:::state
+    J -- No --> A
+```
+
+
+
+## ML Deepdive
+* For the **AI Profile Analysis**, I used **unsupervised learning**, which means that the model groups data points based on their natural and existing similarity to one another without pre-made labels
+* The dataset used: https://www.kaggle.com/datasets/ivansher/nasa-nearest-earth-objects-1910-2024
+  * 330,000+ columns with 30,000+ unique historica NEOs
+* Used KMeans model for this unsupervised learning -
+  * This is because it is simple, fast, and scales efficiently to massive datasets
+* Parameters for the model
+  1) Absolute Magnitude (H)
+  2) Max Diamter (meters)
+     * Used log^10 
+  3) Velocity (mph)
+  4) Miss Distance (miles)
+     * Used log^10
+* Dataset was scaled using Standard Scaler
+* Implemented PCA to reduce the dimensions (feautres) of dataset
+
+Image of Cluster:
+<img width="670" height="528" alt="image" src="https://github.com/user-attachments/assets/1ebb965f-08fa-4a03-8237-1c201846b432" />
+  
 ## Technologies Used:
 * Python: 3.13.2
 * Vs Code
