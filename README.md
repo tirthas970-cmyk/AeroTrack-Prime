@@ -3,6 +3,13 @@
 <div align="center">
   <a href="https://github.com/tirthas970-cmyk">tirthas970-cmyk</a>
 </div>
+<br><br>
+
+<p align="center">
+  <img width="1917" height="965" alt="image" src="https://github.com/user-attachments/assets/5e99c54d-26d9-428e-98de-b9ae27f06935" />
+</p>
+
+
 
 #### What does it do?
 * **NASA Feed Table**: A clean, updating table that shows real names, speeds, and sizes of every asteroid passing Earth today, pulled live from Nasa's actual satellites
