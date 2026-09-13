@@ -51,7 +51,7 @@ if not st.session_state.go:
 
 **What does this dashboard do?**
 - **NASA Feed Table**: A clean, updating table that shows the real names, speeds, and sizes of every asteroid passing Earth today, pulled live from Nasa's **actual** satellites
-- **Threat Assesment Panel**: A panel that shows asteroid with the **higest** potential energy!
+- **Threat Assessment Panel**: A panel that shows asteroid with the **higest** potential energy!
 - **AI Profile Analysis**: Classifies selected asteroid into a specific group based on historical data using **Machine Learning**
 - **Automated Report Generator**: A text file that details **all information** of the selected asteroid
 - **Trajectory Modifier**: Slide bars where you can manually change an asteroid's variables, and see if your mock asteroid hits or misses Earth!
