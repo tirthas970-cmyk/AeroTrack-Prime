@@ -190,7 +190,7 @@ Image of Clusters:
 ## Developmental Timeline:
 * Around 2 Months (Late June 2026 - Early September)
 * On and Off between other projects
-  * Most of the work was done early to mid July, and late to early September
+  * Most of the work was done early to mid July, and late August to early September
 
 ## Key Milestones:
 * Month 1: Getting the GUI setup, NASA feed table, threat panel, and trajectory modifier
